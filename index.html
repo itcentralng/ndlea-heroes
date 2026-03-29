@@ -1,0 +1,1419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>NDLEA Fallen Heroes</title>
+  <style>
+    /* ── Reset & Base ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0a0a0a;
+      font-family: 'Georgia', 'Times New Roman', serif;
+      height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    /* ── Book Container ───────────────────────────────────────── */
+    .book-wrap {
+      position: relative;
+      width: min(380px, 94vw);
+      height: min(620px, 90dvh);
+      perspective: 1800px;
+    }
+
+    /* ── Page ─────────────────────────────────────────────────── */
+    .page {
+      position: absolute;
+      inset: 0;
+      border-radius: 4px 16px 16px 4px;
+      transform-style: preserve-3d;
+      transform-origin: left center;
+      transition: transform 0.75s cubic-bezier(0.645, 0.045, 0.355, 1.000);
+      cursor: pointer;
+    }
+
+    .page.flipped {
+      transform: rotateY(-180deg);
+    }
+
+    /* Stack pages so the current is on top */
+    .page { z-index: 0; }
+    .page.active       { z-index: 10; }
+    .page.active.flipped { z-index: 5; }
+
+    /* ── Page faces ───────────────────────────────────────────── */
+    .face {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border-radius: inherit;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .face-front {
+      background: linear-gradient(160deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 4px 0 20px rgba(0,0,0,0.6), inset -3px 0 8px rgba(0,0,0,0.4);
+    }
+
+    .face-back {
+      background: linear-gradient(160deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: -4px 0 20px rgba(0,0,0,0.6), inset 3px 0 8px rgba(0,0,0,0.4);
+      transform: rotateY(180deg);
+    }
+
+    /* page-edge crease */
+    .face-front::after {
+      content: '';
+      position: absolute;
+      top: 0; right: 0; bottom: 0;
+      width: 6px;
+      background: linear-gradient(to right, transparent, rgba(0,0,0,0.25));
+      border-radius: 0 16px 16px 0;
+      pointer-events: none;
+    }
+
+    /* ── Cover page ───────────────────────────────────────────── */
+    .cover-face {
+      background: linear-gradient(155deg, #1b1b35 0%, #0d2137 50%, #041426 100%);
+      justify-content: center;
+      gap: 18px;
+      padding: 30px 24px;
+    }
+
+    .cover-face .cover-logo {
+      width: 90px;
+      height: 90px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 12px rgba(0,180,255,0.4));
+    }
+
+    .cover-face .cover-title {
+      font-size: 1.65rem;
+      font-weight: 700;
+      color: #e8c870;
+      text-align: center;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      line-height: 1.3;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    }
+
+    .cover-face .cover-sub {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.55);
+      text-align: center;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .cover-face .cover-divider {
+      width: 70%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, #e8c870, transparent);
+    }
+
+    .cover-face .cover-tagline {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.45);
+      text-align: center;
+      font-style: italic;
+      line-height: 1.6;
+      padding: 0 10px;
+    }
+
+    .cover-face .cover-hint {
+      position: absolute;
+      bottom: 22px;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 0.1em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .cover-hint .arrow-icon {
+      width: 18px;
+      opacity: 0.5;
+      animation: nudge 1.6s ease-in-out infinite;
+    }
+
+    @keyframes nudge {
+      0%, 100% { transform: translateX(0); }
+      50%       { transform: translateX(5px); }
+    }
+
+    /* ── Hero page layout ─────────────────────────────────────── */
+    .hero-face {
+      padding: 0;
+    }
+
+    /* Top ribbon */
+    .hero-ribbon {
+      width: 100%;
+      background: linear-gradient(90deg, #8b0000 0%, #c0392b 100%);
+      padding: 7px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .ribbon-badge {
+      font-size: 0.6rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.9);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .ribbon-serial {
+      font-size: 0.6rem;
+      color: rgba(255,255,255,0.65);
+      letter-spacing: 0.1em;
+    }
+
+    /* Photo area */
+    .hero-photo-wrap {
+      width: 100%;
+      flex: 0 0 auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px 20px 10px;
+    }
+
+    .hero-photo-frame {
+      width: 155px;
+      height: 175px;
+      border-radius: 6px;
+      border: 3px solid #e8c870;
+      box-shadow: 0 0 0 1px rgba(232,200,112,0.3), 0 8px 30px rgba(0,0,0,0.7);
+      overflow: hidden;
+      background: #111;
+      position: relative;
+    }
+
+    .hero-photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      display: block;
+    }
+
+    /* Candlelight overlay on photo */
+    .hero-photo-frame::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.45) 100%);
+      pointer-events: none;
+    }
+
+    /* Info section */
+    .hero-info {
+      width: 100%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 10px 20px 16px;
+      gap: 0;
+    }
+
+    .hero-name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #e8c870;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      line-height: 1.3;
+      margin-bottom: 4px;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+    }
+
+    .hero-service-no {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.55);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .hero-divider {
+      width: 60%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(232,200,112,0.5), transparent);
+      margin-bottom: 14px;
+    }
+
+    .hero-detail-grid {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .detail-row {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 2px;
+    }
+
+    .detail-label {
+      font-size: 0.58rem;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .detail-value {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.88);
+      line-height: 1.35;
+      font-family: 'Georgia', serif;
+    }
+
+    /* Flame / candle footer */
+    .hero-footer {
+      width: 100%;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 8px 0 14px;
+      gap: 5px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .flame-wrap {
+      display: flex;
+      gap: 12px;
+      align-items: flex-end;
+    }
+
+    .candle {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    .candle-flame {
+      width: 10px;
+      height: 14px;
+      background: radial-gradient(ellipse at 50% 80%, #fff5b0 0%, #ffb347 40%, #e25822 80%, transparent 100%);
+      border-radius: 50% 50% 30% 30%;
+      animation: flicker 1.2s ease-in-out infinite alternate;
+      filter: blur(0.4px);
+    }
+
+    .candle-flame.small {
+      width: 7px;
+      height: 10px;
+      animation-delay: 0.3s;
+    }
+
+    @keyframes flicker {
+      0%   { transform: scaleX(1)   scaleY(1)    skewX(0deg); opacity: 1; }
+      33%  { transform: scaleX(0.9) scaleY(1.05) skewX(-2deg); opacity: 0.95; }
+      66%  { transform: scaleX(1.1) scaleY(0.97) skewX(2deg);  opacity: 0.9; }
+      100% { transform: scaleX(0.95)scaleY(1.03) skewX(-1deg); opacity: 1; }
+    }
+
+    .candle-body {
+      width: 10px;
+      height: 24px;
+      background: linear-gradient(to right, #f0e0c0, #fffaf0, #d4b896);
+      border-radius: 2px 2px 0 0;
+    }
+
+    .candle-body.small {
+      width: 7px;
+      height: 18px;
+    }
+
+    .hero-rip {
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-family: 'Arial', sans-serif;
+    }
+
+    /* ── Navigation controls ──────────────────────────────────── */
+    .nav-bar {
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .nav-btn {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 50%;
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      -webkit-tap-highlight-color: transparent;
+      outline: none;
+    }
+
+    .nav-btn:hover  { background: rgba(255,255,255,0.14); }
+    .nav-btn:active { transform: scale(0.92); }
+    .nav-btn:disabled { opacity: 0.25; cursor: default; }
+
+    .nav-btn svg { width: 18px; height: 18px; fill: rgba(255,255,255,0.75); }
+
+    .page-counter {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.1em;
+      min-width: 60px;
+      text-align: center;
+      font-family: 'Arial', sans-serif;
+    }
+
+    /* ── End page ─────────────────────────────────────────────── */
+    .end-face {
+      justify-content: center;
+      gap: 16px;
+      padding: 30px 24px;
+      text-align: center;
+    }
+
+    .end-face .end-icon { font-size: 2.5rem; }
+
+    .end-face .end-title {
+      font-size: 1rem;
+      color: #e8c870;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .end-face .end-text {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.4);
+      line-height: 1.7;
+      font-style: italic;
+    }
+
+    /* ── Touch / swipe hint ───────────────────────────────────── */
+    .swipe-hint {
+      position: absolute;
+      bottom: -34px;
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.2);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="book-wrap" id="bookWrap">
+  <!-- Pages are injected by JS -->
+  <span class="swipe-hint">Swipe or tap arrows to turn pages</span>
+</div>
+
+<div class="nav-bar">
+  <button class="nav-btn" id="btnPrev" aria-label="Previous page">
+    <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
+  </button>
+  <span class="page-counter" id="pageCounter">1 / 1</span>
+  <button class="nav-btn" id="btnNext" aria-label="Next page">
+    <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+  </button>
+</div>
+
+<script>
+  // ── Hero data ──────────────────────────────────────────────────
+  // Add more heroes here. "photo" is the serial number (filename without extension).
+  const heroes = [
+    {
+      serial: 1,
+      name: "Gabriel Uyi Musa",
+      rank: "NA",
+      serviceNo: "NA/6309",
+      dateOfDeath: "4th September, 2006",
+      causeOfDeath: "Murdered during a raid operation",
+      placeOfDeath: "Eguara, Edo State Command"
+    },
+    {
+      serial: 2,
+      name: "Bashir Iliyasu",
+      rank: "ASN II",
+      serviceNo: "SP/10633",
+      dateOfDeath: "23rd May, 2022",
+      causeOfDeath: "Road traffic accident during operation",
+      placeOfDeath: "Along Okene/Lokoja Highway, Kogi State Command"
+    },
+    {
+      serial: 3,
+      name: "Isaiah Danjuma Maji",
+      rank: "ASN II",
+      serviceNo: "SP/2696",
+      dateOfDeath: "28th October, 2004",
+      causeOfDeath: "Killed by mob attack in the course of operation",
+      placeOfDeath: "Kabo Village, Kano State Command"
+    },
+    {
+      serial: 4,
+      name: "Ahmed Abdul-Hadi Ibrahim",
+      rank: "CSN",
+      serviceNo: "SP/6782",
+      dateOfDeath: "4th October, 2024",
+      causeOfDeath: "Drowned to death during a raid operation",
+      placeOfDeath: "Doma Road, Lafia, Nasarawa State Command"
+    },
+    {
+      serial: 5,
+      name: "Abba Samuel Sunday",
+      rank: "NA",
+      serviceNo: "NA/7940",
+      dateOfDeath: "6th October, 2020",
+      causeOfDeath: "Killed during operation",
+      placeOfDeath: "Hong, Adamawa State Command"
+    },
+    {
+      serial: 6,
+      name: "Ogunjemilua O. Sunday",
+      rank: "ASN II",
+      serviceNo: "SP/1717",
+      dateOfDeath: "27th June, 2012",
+      causeOfDeath: "Killed by a hit and run driver during stop and search",
+      placeOfDeath: "Sokoto Command"
+    },
+    {
+      serial: 7,
+      name: "Ahmed Abubakar",
+      rank: "NA",
+      serviceNo: "NA/7346",
+      dateOfDeath: "20th August, 2016",
+      causeOfDeath: "Drowned in a river at Gwanje water side during official assignment",
+      placeOfDeath: "Maiduguri, Borno Command"
+    },
+    {
+      serial: 8,
+      name: "Onwumere Nicholas Ude",
+      rank: "ASN II",
+      serviceNo: "SP/6536",
+      dateOfDeath: "13th October, 2017",
+      causeOfDeath: "Killed by unknown gunmen during stop and search motorized patrol",
+      placeOfDeath: "Kogi Command"
+    },
+    {
+      serial: 9,
+      name: "Oraegbunam Anthony Jekwu",
+      rank: "NA",
+      serviceNo: "2738",
+      dateOfDeath: "1st November, 1994",
+      causeOfDeath: "Died from gunshot wounds as a result of accidental discharge from the rifle he was handling",
+      placeOfDeath: "Zonal Command Office, Kano"
+    },
+    {
+      serial: 10,
+      name: "Odunlami Jide Joshua",
+      rank: "NA",
+      serviceNo: "NA/17056",
+      dateOfDeath: "22nd July, 2025",
+      causeOfDeath: "Gunshot during operation",
+      placeOfDeath: "Ondo State Command"
+    },
+    {
+      serial: 11,
+      name: "Yakubu Isaiah Isaac",
+      rank: "CNA",
+      serviceNo: "SP/6676",
+      dateOfDeath: "19th September, 2023",
+      causeOfDeath: "Mob attack by unknown gunmen in the course of joint task force operation",
+      placeOfDeath: "Mbaino Local Government Area, Imo State"
+    },
+    {
+      serial: 12,
+      name: "Kyune Emmanuel",
+      rank: "ASN I",
+      serviceNo: "SP/7668",
+      dateOfDeath: "10th January, 2025",
+      causeOfDeath: "Head injury sustained in accident on his way back from a raid operation",
+      placeOfDeath: "Aba, Owerri Road, Abia State Command"
+    },
+    {
+      serial: 13,
+      name: "Joshua Ishaku",
+      rank: "CNA",
+      serviceNo: "6347",
+      dateOfDeath: "15th June, 2014",
+      causeOfDeath: "Mob attack",
+      placeOfDeath: "Owode-Yewa, Ogun State"
+    },
+    {
+      serial: 14,
+      name: "Ogun Sunday Kayode",
+      rank: "CNA",
+      serviceNo: "SP/6251",
+      dateOfDeath: "15th March, 2022",
+      causeOfDeath: "Died as a result of gunshot wounds by unknown gunmen",
+      placeOfDeath: "Agency State Headquarters, Ebonyi State"
+    },
+    {
+      serial: 15,
+      name: "Nemuel Adams",
+      rank: "SNA",
+      serviceNo: "SN/8082",
+      dateOfDeath: "24th April, 2019",
+      causeOfDeath: "Killed by a hit and run driver while on patrol",
+      placeOfDeath: "Abakaliki, Ebonyi State Command"
+    },
+    {
+      serial: 16,
+      name: "Adegoke Emmanuel A.",
+      rank: "CNA",
+      serviceNo: "SN/4009",
+      dateOfDeath: "28th August, 2008",
+      causeOfDeath: "Knocked down and died during operation",
+      placeOfDeath: "Damaturu Gashua Road, Yobe State Command"
+    },
+    {
+      serial: 17,
+      name: "Famakinwa Temidayo",
+      rank: "NA II",
+      serviceNo: "NA/2167",
+      dateOfDeath: "1st June, 1992",
+      causeOfDeath: "Died as a result of gunshot wounds sustained during official duty in special task force unit",
+      placeOfDeath: "Lagos Command"
+    },
+    {
+      serial: 18,
+      name: "Samuel Allau",
+      rank: "NA",
+      serviceNo: "NA/3193",
+      dateOfDeath: "23rd January, 1998",
+      causeOfDeath: "Crushed to death at checkpoint while on duty",
+      placeOfDeath: "Aliade Area, Benue State"
+    },
+    {
+      serial: 19,
+      name: "Ukpong Ini Edward",
+      rank: "ASN II",
+      serviceNo: "PF/4220",
+      dateOfDeath: "22nd January, 1999",
+      causeOfDeath: "Mob attack in a follow-up operation",
+      placeOfDeath: "Akala, Mushin Area, Lagos Command"
+    },
+    {
+      serial: 20,
+      name: "Mbre Thomas",
+      rank: "ASN I",
+      serviceNo: "SP/625",
+      dateOfDeath: "11th September, 2017",
+      causeOfDeath: "Illness due to complications from mob attack",
+      placeOfDeath: "Lagos State Command"
+    },
+    {
+      serial: 21,
+      name: "Ahmed Bala",
+      rank: "SNA",
+      serviceNo: "SP/8195",
+      dateOfDeath: "14th September, 2025",
+      causeOfDeath: "Head injuries sustained from road traffic accident while returning from an operation",
+      placeOfDeath: "Kogi State Command"
+    },
+    {
+      serial: 22,
+      name: "Adolphus Basil",
+      rank: "CNA",
+      serviceNo: "5134",
+      dateOfDeath: "17th December, 1998",
+      causeOfDeath: "Killed at the road checkpoint",
+      placeOfDeath: "Kano Zone Command"
+    },
+    {
+      serial: 23,
+      name: "Sulaiman Bello Chindo",
+      rank: "CNA",
+      serviceNo: "4994",
+      dateOfDeath: "9th September, 2000",
+      causeOfDeath: "Had accident on his way from surveillance on a motorbike",
+      placeOfDeath: "Abeokuta"
+    },
+    {
+      serial: 24,
+      name: "Ian A. Aondowase",
+      rank: "ASN II",
+      serviceNo: "SP/293",
+      dateOfDeath: "8th July, 1998",
+      causeOfDeath: "Mob attack during an operation",
+      placeOfDeath: "Borno State Command"
+    },
+    {
+      serial: 25,
+      name: "Abdulmalik Ibrahim",
+      rank: "NA",
+      serviceNo: "11541",
+      dateOfDeath: "28th December, 2025",
+      causeOfDeath: "Severe injuries sustained from mob attack",
+      placeOfDeath: "Adamawa State Command"
+    },
+    {
+      serial: 26,
+      name: "Oraegbunam Anthony Jekwu",
+      rank: "NA",
+      serviceNo: "NA/2738",
+      dateOfDeath: "2nd July, 1995",
+      causeOfDeath: "Died from gunshot wounds as a result of accidental discharge",
+      placeOfDeath: "Zonal Command Office, Kano"
+    },
+    {
+      serial: 27,
+      name: "Joseph Akpa Danjuma",
+      rank: "ASN I",
+      serviceNo: "SP/1172",
+      dateOfDeath: "9th March, 1996",
+      causeOfDeath: "Died as a result of a mob attack in the course of operation",
+      placeOfDeath: "Katsina State Command"
+    },
+    {
+      serial: 28,
+      name: "Olawepo Ademola T.",
+      rank: "SNA",
+      serviceNo: "2982",
+      dateOfDeath: "23rd February, 1997",
+      causeOfDeath: "Died in the course of an operation",
+      placeOfDeath: "Imo State Command"
+    },
+    {
+      serial: 29,
+      name: "Akinyele Isaac Durotimi",
+      rank: "NASS I",
+      serviceNo: "SN/9301",
+      dateOfDeath: "18th October, 2022",
+      causeOfDeath: "Died due to head injury in the course of a raid operation",
+      placeOfDeath: "Ondo State Command"
+    },
+    {
+      serial: 30,
+      name: "Musa Abduljalal S.",
+      rank: "ASN II",
+      serviceNo: "SP/5958",
+      dateOfDeath: "17th February, 2019",
+      causeOfDeath: "Killed by an unknown gunman in the course of official duty",
+      placeOfDeath: "Ondo State Command"
+    },
+    {
+      serial: 31,
+      name: "Jume Aminu",
+      rank: "NA",
+      serviceNo: "17407",
+      dateOfDeath: "18th July, 2025",
+      causeOfDeath: "Died as a result of mob attack during operation where he sustained injuries",
+      placeOfDeath: "Jigawa"
+    },
+    {
+      serial: 32,
+      name: "Usman Kassim",
+      rank: "SN",
+      serviceNo: "SP/3273",
+      dateOfDeath: "23rd July, 2005",
+      causeOfDeath: "Died during promotional exams",
+      placeOfDeath: "Academy's Medical Clinic, Jos"
+    },
+    {
+      serial: 33,
+      name: "Allen M. Asor",
+      rank: "SN",
+      serviceNo: "SP/1361",
+      dateOfDeath: "21st March, 2012",
+      causeOfDeath: "Killed during mob attack",
+      placeOfDeath: "Adamawa State Command"
+    },
+    {
+      serial: 34,
+      name: "Wibe Dum Wieezor",
+      rank: "CSN",
+      serviceNo: "1132",
+      dateOfDeath: "23rd August, 2002",
+      causeOfDeath: "Died as a result of gunshot by armed robbers",
+      placeOfDeath: "Onitsha, Anambra State Command"
+    },
+    {
+      serial: 35,
+      name: "Hassan A.",
+      rank: "CNA",
+      serviceNo: "5036",
+      dateOfDeath: "28th November, 2004",
+      causeOfDeath: "Died in the course of an operation",
+      placeOfDeath: "Kabo, Kano State"
+    },
+    {
+      serial: 36,
+      name: "Galadima Bissala T.",
+      rank: "NA",
+      serviceNo: "NA/8431",
+      dateOfDeath: "9th March, 2013",
+      causeOfDeath: "Died after conveying officers back to the office after an official assignment",
+      placeOfDeath: "Abaji Area Command, FCT"
+    },
+    {
+      serial: 37,
+      name: "Ikusemoro Phillips Kokumo",
+      rank: "ASN I",
+      serviceNo: "SP/6594",
+      dateOfDeath: "26th March, 2020",
+      causeOfDeath: "Killed by a hit and run vehicle in the course of official assignment",
+      placeOfDeath: "Sokoto"
+    },
+    {
+      serial: 38,
+      name: "Afolabi Azeez Adekunle",
+      rank: "SNA",
+      serviceNo: "NA/7912",
+      dateOfDeath: "25th January, 2024",
+      causeOfDeath: "Vehicle accident during official assignment",
+      placeOfDeath: "N/A"
+    },
+    {
+      serial: 39,
+      name: "Christopher D. Igelle",
+      rank: "SNA",
+      serviceNo: "SNA/2389",
+      dateOfDeath: "11th June, 2001",
+      causeOfDeath: "Gunshot during operation",
+      placeOfDeath: "Oyo State Command"
+    },
+    {
+      serial: 40,
+      name: "Musa Abdullarahaman",
+      rank: "NA",
+      serviceNo: "7610",
+      dateOfDeath: "13th October, 2017",
+      causeOfDeath: "Attack at the patrol checkpoint by unknown gunmen",
+      placeOfDeath: "Okene"
+    },
+    {
+      serial: 41,
+      name: "Rabiu Usman Kazaure",
+      rank: "DSN",
+      serviceNo: "2867",
+      dateOfDeath: "15th June, 2014",
+      causeOfDeath: "Mob attack while carrying out official duties",
+      placeOfDeath: "Ogun State Command"
+    },
+    {
+      serial: 42,
+      name: "Wassa Maic Awak",
+      rank: "ASN II",
+      serviceNo: "2438",
+      dateOfDeath: "18th January, 2001",
+      causeOfDeath: "Mob attack during operation",
+      placeOfDeath: "Calabar Zonal Command"
+    },
+    {
+      serial: 43,
+      name: "Iliyasu Mohammed",
+      rank: "NASS II",
+      serviceNo: "8034",
+      dateOfDeath: "17th February, 2019",
+      causeOfDeath: "Gunshot while performing official duties",
+      placeOfDeath: "Ondo State Command"
+    },
+    {
+      serial: 44,
+      name: "Bulus Leo Dam",
+      rank: "ASN I",
+      serviceNo: "753",
+      dateOfDeath: "25th November, 1994",
+      causeOfDeath: "Motor accident in the course of official assignment",
+      placeOfDeath: "Ilorin / Warri"
+    },
+    {
+      serial: 45,
+      name: "Imran Aliyu",
+      rank: "ASN I",
+      serviceNo: "0635",
+      dateOfDeath: "14th February, 2025",
+      causeOfDeath: "Mob attack",
+      placeOfDeath: "Amana Village, along Kaduna-Jos Road"
+    },
+    {
+      serial: 46,
+      name: "Fynecontry Ihuoma Victory",
+      rank: "CNA",
+      serviceNo: "13237",
+      dateOfDeath: "19th January, 2023",
+      causeOfDeath: "Injuries sustained from road accident while returning from an operation",
+      placeOfDeath: "Ovia River Bridge, Benin-Lagos Road, Edo State"
+    },
+    {
+      serial: 47,
+      name: "Owolodun Bolaji",
+      rank: "SN",
+      serviceNo: "5674",
+      dateOfDeath: "15th June, 2016",
+      causeOfDeath: "Mob attack during operation",
+      placeOfDeath: "Owode Yewa, Ogun State"
+    },
+    {
+      serial: 48,
+      name: "Ante Wilson Effiong",
+      rank: "NA",
+      serviceNo: "7247",
+      dateOfDeath: "11th July, 2016",
+      causeOfDeath: "Mob attack",
+      placeOfDeath: "Outskirt of Uyo LGA, Akwa-Ibom State"
+    },
+    {
+      serial: 49,
+      name: "Ansellem Anayo O.",
+      rank: "SNA",
+      serviceNo: "6301",
+      dateOfDeath: "20th February, 2022",
+      causeOfDeath: "Killed on official motorized patrol by unknown attackers",
+      placeOfDeath: "Ebonyi"
+    },
+    {
+      serial: 50,
+      name: "Mbonu C. Charles",
+      rank: "ASN II",
+      serviceNo: "4676",
+      dateOfDeath: "22nd January, 2014",
+      causeOfDeath: "Killed during operation",
+      placeOfDeath: "Edo State Command"
+    },
+    {
+      serial: 51,
+      name: "Nasiru Ahmed Kotagora",
+      rank: "SN",
+      serviceNo: "3008",
+      dateOfDeath: "24th December, 2019",
+      causeOfDeath: "Knocked and killed during stop and search operations",
+      placeOfDeath: "Niger State Command"
+    },
+    {
+      serial: 52,
+      name: "Olatunde Akinwale",
+      rank: "CSN",
+      serviceNo: "273",
+      dateOfDeath: "11th January, 2012",
+      causeOfDeath: "Killed while preparing to go to work",
+      placeOfDeath: "Idiroko Special Area Command"
+    },
+    {
+      serial: 53,
+      name: "Atti Abighe Usman",
+      rank: "CNA",
+      serviceNo: "3783",
+      dateOfDeath: "23rd February, 1997",
+      causeOfDeath: "Mob attack",
+      placeOfDeath: "Obosima, Imo State"
+    },
+    {
+      serial: 54,
+      name: "Magaji Aliyu",
+      rank: "CNA",
+      serviceNo: "6930",
+      dateOfDeath: "17th February, 2019",
+      causeOfDeath: "Killed by unknown gunmen in the course of operation",
+      placeOfDeath: "Ifon Area Command, Ondo State"
+    },
+    {
+      serial: 55,
+      name: "Kenneth Love-Day Tarikoro",
+      rank: "CNA",
+      serviceNo: "3952",
+      dateOfDeath: "21st May, 2009",
+      causeOfDeath: "Gunshot during operation",
+      placeOfDeath: "Abbi Town, Delta State"
+    },
+    {
+      serial: 56,
+      name: "Bolaji I. Raufu",
+      rank: "NASS II",
+      serviceNo: "3306",
+      dateOfDeath: "18th March, 2004",
+      causeOfDeath: "Gunshot during operation",
+      placeOfDeath: "Kontagora Area Command, Niger"
+    },
+    {
+      serial: 57,
+      name: "Uwakwe Celestine Amauche",
+      rank: "SNA",
+      serviceNo: "8361",
+      dateOfDeath: "5th May, 2020",
+      causeOfDeath: "Killed by gunmen suspected to be kidnappers in the course of official assignment",
+      placeOfDeath: "Mbaitoli LGA, Imo State"
+    },
+    {
+      serial: 58,
+      name: "Abanum Edeli Raymond",
+      rank: "NA",
+      serviceNo: "7391",
+      dateOfDeath: "3rd January, 2017",
+      causeOfDeath: "Killed and hit by a driver in the course of official assignment",
+      placeOfDeath: "Delta State Command"
+    },
+    {
+      serial: 59,
+      name: "Wakili D. Kusaki",
+      rank: "DSN",
+      serviceNo: "4834",
+      dateOfDeath: "14th February, 2015",
+      causeOfDeath: "Shot by unknown gunmen suspected to be Boko Haram while on duty",
+      placeOfDeath: "Gombe State Command Headquarters"
+    },
+    {
+      serial: 60,
+      name: "Mohammed Umar",
+      rank: "CNA",
+      serviceNo: "2722",
+      dateOfDeath: "18th February, 2000",
+      causeOfDeath: "Mob attack during operations",
+      placeOfDeath: "Garki, Abuja"
+    },
+    {
+      serial: 61,
+      name: "Lawal Mohammed Ado",
+      rank: "NASS III",
+      serviceNo: "4528",
+      dateOfDeath: "21st March, 1998",
+      causeOfDeath: "Motor accident",
+      placeOfDeath: "Birnin Gwari Checkpoint, Kaduna"
+    },
+    {
+      serial: 62,
+      name: "Ogbonnewo Emmanuel O.",
+      rank: "SNA",
+      serviceNo: "8063",
+      dateOfDeath: "29th October, 2018",
+      causeOfDeath: "Killed by a hit and run driver in the course of official duty",
+      placeOfDeath: "Ringim Road, Jigawa State Command"
+    },
+    {
+      serial: 63,
+      name: "Abbati Shamsudeen Bello",
+      rank: "NA",
+      serviceNo: "6232",
+      dateOfDeath: "21st May, 2005",
+      causeOfDeath: "Gunshot wounds from attack during operation",
+      placeOfDeath: "Abbi Town, Delta State"
+    },
+    {
+      serial: 64,
+      name: "Bawa Iyah Danjuma",
+      rank: "DSN",
+      serviceNo: "3012",
+      dateOfDeath: "25th April, 2014",
+      causeOfDeath: "Attacked during the course of lawful operation",
+      placeOfDeath: "Uhrongbe Village, Edo State"
+    },
+    {
+      serial: 65,
+      name: "Chiwatalu Kingsley Ifeanyi",
+      rank: "SN",
+      serviceNo: "6758",
+      dateOfDeath: "9th March, 2024",
+      causeOfDeath: "Stabbed on his neck by unknown men in military uniform",
+      placeOfDeath: "Niger State"
+    },
+    {
+      serial: 66,
+      name: "Sadiq Bako Mujahid",
+      rank: "CNA",
+      serviceNo: "23/NA/16378",
+      dateOfDeath: "6th February, 2026",
+      causeOfDeath: "Killed during operation",
+      placeOfDeath: "Bonny Island, Port Harcourt, Rivers State Command"
+    },
+    {
+      serial: 67,
+      name: "Bolarinwa I. Olapoju",
+      rank: "NA",
+      serviceNo: "5958",
+      dateOfDeath: "3rd May, 2000",
+      causeOfDeath: "Died as a result of mob attack",
+      placeOfDeath: "Ejigbo, Osun State"
+    },
+    {
+      serial: 68,
+      name: "Kuponu M. Oladeji",
+      rank: "ASN II",
+      serviceNo: "SP/234",
+      dateOfDeath: "4th October, 1991",
+      causeOfDeath: "Died in a fatal accident in the course of an official assignment",
+      placeOfDeath: "Kano Zone"
+    },
+    {
+      serial: 69,
+      name: "Olojo Ajoade",
+      rank: "NA",
+      serviceNo: "2058",
+      dateOfDeath: "1st June, 1995",
+      causeOfDeath: "Mob attack in the course of official assignment",
+      placeOfDeath: "Kangiwa Village, Kebbi Zone"
+    },
+    {
+      serial: 70,
+      name: "Adegbemi Jamiu",
+      rank: "NA",
+      serviceNo: "3719",
+      dateOfDeath: "6th April, 1999",
+      causeOfDeath: "Killed in the course of official assignment",
+      placeOfDeath: "Ope-Iu Village, Ogun State"
+    },
+    {
+      serial: 71,
+      name: "Suleiman A. Lawal",
+      rank: "NA",
+      serviceNo: "2918",
+      dateOfDeath: "12th November, 1996",
+      causeOfDeath: "Shot while on duty",
+      placeOfDeath: "Lagos Badagry Expressway Command, Lagos Zone"
+    },
+    {
+      serial: 72,
+      name: "Areneth Williams",
+      rank: "NA",
+      serviceNo: "563",
+      dateOfDeath: "27th July, 1998",
+      causeOfDeath: "Killed by accidental discharge in the course of an operation",
+      placeOfDeath: "Wukari, Taraba"
+    },
+    {
+      serial: 73,
+      name: "Orukotan Joseph",
+      rank: "NA",
+      serviceNo: "2999",
+      dateOfDeath: "22nd November, 1998",
+      causeOfDeath: "Abducted by cannabis farmers during the course of duty; missing since then",
+      placeOfDeath: "Warri Zone, Delta State"
+    },
+    {
+      serial: 74,
+      name: "Kusimo O. Kolawole",
+      rank: "NA",
+      serviceNo: "321",
+      dateOfDeath: "20th March, 1999",
+      causeOfDeath: "Kidnapped in the course of an operation; whereabouts unknown",
+      placeOfDeath: "Olushi Village, Edo State"
+    },
+    {
+      serial: 75,
+      name: "Adogu Solomon",
+      rank: "NASS II",
+      serviceNo: "3808",
+      dateOfDeath: "22nd November, 1998",
+      causeOfDeath: "Abducted by cannabis farmers in the course of official assignment; missing since then",
+      placeOfDeath: "Warri, Warri Zone"
+    },
+    {
+      serial: 76,
+      name: "Ariwayo B. Sunday",
+      rank: "NA",
+      serviceNo: "5003",
+      dateOfDeath: "23rd March, 1999",
+      causeOfDeath: "Kidnapped along with two officers in the course of an operation",
+      placeOfDeath: "Olushi Village, Benin"
+    },
+    {
+      serial: 77,
+      name: "Osasogie Omobude",
+      rank: "NA",
+      serviceNo: "827",
+      dateOfDeath: "22nd June, 1996",
+      causeOfDeath: "Stabbed to death on his way to NDLEA Office for night shift duty",
+      placeOfDeath: "Calabar, Calabar Zone"
+    },
+    {
+      serial: 78,
+      name: "Abdu Gudaji",
+      rank: "NA",
+      serviceNo: "2869",
+      dateOfDeath: "26th September, 1997",
+      causeOfDeath: "Killed in the course of official assignment",
+      placeOfDeath: "Warri, Warri Zone"
+    },
+    {
+      serial: 79,
+      name: "Anyanwu G. Echeazu",
+      rank: "NA",
+      serviceNo: "330",
+      dateOfDeath: "20th February, 1997",
+      causeOfDeath: "Mob attack in the course of a follow-up operation",
+      placeOfDeath: "Obosima Village, Onitsha Zone"
+    },
+    {
+      serial: 80,
+      name: "Soje Y. S.",
+      rank: "Senior Counselling Officer",
+      serviceNo: "4416",
+      dateOfDeath: "27th July, 1998",
+      causeOfDeath: "Died in a motor accident while returning from Kogi State on official assignment",
+      placeOfDeath: "Lokoja Road, Makurdi Zone"
+    },
+    {
+      serial: 81,
+      name: "Offor Christiana",
+      rank: "NA",
+      serviceNo: "3216",
+      dateOfDeath: "20th March, 1999",
+      causeOfDeath: "Kidnapped along with two officers in the course of a follow-up operation to arrest a suspect",
+      placeOfDeath: "Olushi Village, Edo State"
+    },
+    {
+      serial: 82,
+      name: "Ifejika Samuel",
+      rank: "Senior Narcotic Intelligence Officer",
+      serviceNo: "729",
+      dateOfDeath: "25th November, 1994",
+      causeOfDeath: "Died in a motor accident along with three officers while on assignment",
+      placeOfDeath: "N/A"
+    },
+    {
+      serial: 83,
+      name: "Audu Musa",
+      rank: "NASS II",
+      serviceNo: "1229",
+      dateOfDeath: "17th August, 1993",
+      causeOfDeath: "Attacked and shot by armed robbers while on official duty",
+      placeOfDeath: "Idiroko Border Post"
+    },
+    {
+      serial: 84,
+      name: "Atti A. Usman",
+      rank: "CNA",
+      serviceNo: "3783",
+      dateOfDeath: "23rd February, 1997",
+      causeOfDeath: "Mob attack in the course of a follow-up operation to effect an arrest",
+      placeOfDeath: "Obosima Village, Imo State"
+    },
+    {
+      serial: 85,
+      name: "Shehu Aliyu",
+      rank: "NA",
+      serviceNo: "21/NA/13394",
+      dateOfDeath: "11th January, 2023",
+      causeOfDeath: "Killed in a mob attack while on operations to arrest a drug suspect",
+      placeOfDeath: "Bagarawa Village, Bodinga Area Command, Sokoto State"
+    }
+  ];
+
+  // ── Helpers ────────────────────────────────────────────────────
+  function heroPhotoSrc(serial) {
+    return `images/heroes/${serial}.jpg`;
+  }
+
+  function makeFlamePair() {
+    return `
+      <div class="flame-wrap">
+        <div class="candle"><div class="candle-flame small"></div><div class="candle-body small"></div></div>
+        <div class="candle"><div class="candle-flame"></div><div class="candle-body"></div></div>
+        <div class="candle"><div class="candle-flame small"></div><div class="candle-body small"></div></div>
+      </div>`;
+  }
+
+  // ── Build pages array ──────────────────────────────────────────
+  // Pages: [cover, hero1, hero2, ..., end]
+  const bookWrap = document.getElementById('bookWrap');
+
+  function buildPages() {
+    // Cover
+    const coverPage = document.createElement('div');
+    coverPage.className = 'page';
+    coverPage.dataset.index = '0';
+    coverPage.innerHTML = `
+      <div class="face face-front cover-face">
+        <img class="cover-logo" src="images/ndlea-logo.png" alt="NDLEA Logo"
+             onerror="this.style.display='none'">
+        <div class="cover-title">NDLEA<br>Fallen Heroes</div>
+        <div class="cover-divider"></div>
+        <div class="cover-sub">In Memoriam</div>
+        <div class="cover-tagline">
+          "They gave their lives so others may<br>live free from the scourge of drugs."
+        </div>
+        <div class="cover-hint">
+          <svg class="arrow-icon" viewBox="0 0 24 24" fill="white"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+          Tap to begin
+        </div>
+      </div>
+      <div class="face face-back hero-face" style="justify-content:center;align-items:center;">
+        <span style="color:rgba(255,255,255,0.15);font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;">Turn back</span>
+      </div>`;
+    bookWrap.appendChild(coverPage);
+
+    // Hero pages
+    heroes.forEach((hero, i) => {
+      const pg = document.createElement('div');
+      pg.className = 'page';
+      pg.dataset.index = String(i + 1);
+
+      const imgSrc = heroPhotoSrc(hero.serial);
+
+      pg.innerHTML = `
+        <div class="face face-front hero-face">
+          <div class="hero-ribbon">
+            <span class="ribbon-badge">NDLEA &mdash; Fallen Hero</span>
+            <span class="ribbon-serial">#${String(i + 1).padStart(3,'0')}</span>
+          </div>
+          <div class="hero-photo-wrap">
+            <div class="hero-photo-frame">
+              <img src="${imgSrc}" alt="${hero.name}"
+                   onerror="this.src='images/placeholder.jpg'">
+            </div>
+          </div>
+          <div class="hero-info">
+            <div class="hero-name">${hero.name}</div>
+            <div class="hero-service-no">${hero.serviceNo}</div>
+            <div class="hero-divider"></div>
+            <div class="hero-detail-grid">
+              <div class="detail-row">
+                <span class="detail-label">Date of Death</span>
+                <span class="detail-value">${hero.dateOfDeath}</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Place of Death</span>
+                <span class="detail-value">${hero.placeOfDeath}</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause of Death</span>
+                <span class="detail-value">${hero.causeOfDeath}</span>
+              </div>
+            </div>
+          </div>
+          <div class="hero-footer">
+            ${makeFlamePair()}
+            <div class="hero-rip">Rest In Peace</div>
+          </div>
+        </div>
+        <div class="face face-back hero-face" style="justify-content:center;align-items:center;">
+          <span style="color:rgba(255,255,255,0.15);font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;">Turn back</span>
+        </div>`;
+      bookWrap.appendChild(pg);
+    });
+
+    // End page
+    const endPage = document.createElement('div');
+    endPage.className = 'page';
+    endPage.dataset.index = String(heroes.length + 1);
+    endPage.innerHTML = `
+      <div class="face face-front end-face">
+        <div class="end-icon">🕯️</div>
+        <div class="end-title">Their sacrifice<br>is not forgotten</div>
+        <div class="hero-divider" style="width:50%;margin:0 auto;"></div>
+        <div class="end-text">
+          Every name on these pages belongs to a<br>
+          brave officer who stood firm against<br>
+          the menace of illicit drugs in Nigeria.<br><br>
+          May they rest in eternal peace.
+        </div>
+        ${makeFlamePair()}
+      </div>
+      <div class="face face-back end-face">
+        <span style="color:rgba(255,255,255,0.15);font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;">Turn back</span>
+      </div>`;
+    bookWrap.appendChild(endPage);
+  }
+
+  // ── Flip engine ────────────────────────────────────────────────
+  buildPages();
+
+  const pages = Array.from(bookWrap.querySelectorAll('.page'));
+  const total  = pages.length;   // cover + heroes + end
+  let current  = 0;              // which page is "active" (shown face-front)
+
+  const btnPrev    = document.getElementById('btnPrev');
+  const btnNext    = document.getElementById('btnNext');
+  const pageCounter = document.getElementById('pageCounter');
+
+  function updateUI() {
+    pageCounter.textContent = `${current + 1} / ${total}`;
+    btnPrev.disabled = current === 0;
+    btnNext.disabled = current === total - 1;
+
+    pages.forEach((pg, i) => {
+      pg.classList.remove('active');
+      // Pages before current are flipped and hidden behind
+      if (i < current) {
+        pg.classList.add('flipped');
+        pg.style.zIndex = i;
+      } else if (i === current) {
+        pg.classList.remove('flipped');
+        pg.classList.add('active');
+        pg.style.zIndex = total + 1;
+      } else {
+        pg.classList.remove('flipped');
+        pg.style.zIndex = total - i;
+      }
+    });
+  }
+
+  function goNext() {
+    if (current >= total - 1) return;
+    // Flip the current page away
+    pages[current].classList.add('flipped');
+    pages[current].style.zIndex = current;
+    current++;
+    pages[current].classList.add('active');
+    pages[current].style.zIndex = total + 1;
+    updateUI();
+  }
+
+  function goPrev() {
+    if (current === 0) return;
+    current--;
+    pages[current].classList.remove('flipped');
+    pages[current].classList.add('active');
+    pages[current].style.zIndex = total + 1;
+    updateUI();
+  }
+
+  btnNext.addEventListener('click', goNext);
+  btnPrev.addEventListener('click', goPrev);
+
+  // Tap on page face to advance
+  bookWrap.addEventListener('click', (e) => {
+    if (!e.target.closest('.nav-btn')) goNext();
+  });
+
+  // ── Swipe support ──────────────────────────────────────────────
+  let touchStartX = 0;
+  bookWrap.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].clientX;
+  }, { passive: true });
+  bookWrap.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) < 40) return;
+    if (dx < 0) goNext();
+    else         goPrev();
+  }, { passive: true });
+
+  // ── Init ───────────────────────────────────────────────────────
+  updateUI();
+</script>
+</body>
+</html>
