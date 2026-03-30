@@ -8,7 +8,7 @@
   <link href="{{ url_for('static', filename='images/ndlea-logo.png') }}" rel="shortcut icon" type="image/x-icon" />
   <style>
     /* ── Memorial-specific overrides ── */
-    body { background: #0a0a0a; color: #fff; font-family: 'Georgia', serif; }
+    body { background: #1a0000; color: #fff; font-family: 'Georgia', serif; }
 
     /* Header */
     .memorial-header {
@@ -18,7 +18,7 @@
       justify-content: center;
       gap: 0.5rem;
       padding: 1rem 1rem 0.7rem;
-      background: rgba(0,0,0,0.65);
+      background: rgba(100,0,0,0.75);
       backdrop-filter: blur(4px);
       position: relative;
       z-index: 10;
@@ -27,7 +27,7 @@
     .memorial-title {
       text-align: center;
       text-transform: uppercase;
-      background-image: linear-gradient(-225deg, #FFD700 0%, #fff 30%, #FFD700 60%, #fff 100%);
+      background-image: linear-gradient(-225deg, #ff4444 0%, #fff 30%, #ff4444 60%, #fff 100%);
       background-size: 200% auto;
       background-clip: text;
       -webkit-background-clip: text;
@@ -65,29 +65,29 @@
     /* ── Cover page ── */
     .cover-page {
       width: 700px; height: 960px;
-      background: linear-gradient(160deg, #0d1b0d 0%, #1a3a1a 50%, #0d1b0d 100%);
+      background: linear-gradient(160deg, #1a0000 0%, #4a0000 50%, #1a0000 100%);
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
       gap: 1.2rem;
-      border-right: 3px solid #FFD70088;
+      border-right: 3px solid #ff444488;
       box-sizing: border-box;
       padding: 2rem;
       text-align: center;
     }
-    .cover-page img { width: 220px; filter: drop-shadow(0 0 18px #FFD70066); }
+    .cover-page img { width: 220px; filter: drop-shadow(0 0 18px #ff444466); }
     .cover-title {
-      font-size: 2.4rem; font-weight: bold; color: #FFD700;
-      text-shadow: 0 0 20px #FFD70055;
+      font-size: 2.4rem; font-weight: bold; color: #fff;
+      text-shadow: 0 0 20px #ff444455;
       line-height: 1.35;
     }
     .cover-sub {
-      font-size: 1rem; color: #aaa; letter-spacing: 0.08em;
-      border-top: 1px solid #FFD70055;
-      border-bottom: 1px solid #FFD70055;
+      font-size: 1rem; color: #ffaaaa; letter-spacing: 0.08em;
+      border-top: 1px solid #ff444455;
+      border-bottom: 1px solid #ff444455;
       padding: 0.5rem 1.5rem;
     }
     .cover-count {
-      font-size: 0.85rem; color: #888;
+      font-size: 0.85rem; color: #ffbbbb;
     }
     .cover-flame {
       font-size: 2.8rem;
@@ -102,7 +102,7 @@
     /* ── Intro page ── */
     .intro-page {
       width: 700px; height: 960px;
-      background: linear-gradient(170deg, #0d1b0d 0%, #122012 100%);
+      background: linear-gradient(170deg, #1a0000 0%, #2e0000 100%);
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
       padding: 2rem 2.5rem;
@@ -110,14 +110,14 @@
       text-align: center;
       gap: 1.2rem;
     }
-    .intro-page h2 { color: #FFD700; font-size: 1.65rem; margin: 0; }
-    .intro-page p { color: #ccc; font-size: 1.05rem; line-height: 1.8; margin: 0; }
-    .intro-divider { width: 80%; border: none; border-top: 1px solid #FFD70055; }
+    .intro-page h2 { color: #ff6666; font-size: 1.65rem; margin: 0; }
+    .intro-page p { color: #eee; font-size: 1.05rem; line-height: 1.8; margin: 0; }
+    .intro-divider { width: 80%; border: none; border-top: 1px solid #ff444455; }
 
     /* ── Hero page ── */
     .hero-page {
       width: 700px; height: 960px;
-      background: linear-gradient(170deg, #0d1212 0%, #111a11 60%, #0d1212 100%);
+      background: linear-gradient(170deg, #1a0000 0%, #2a0000 60%, #1a0000 100%);
       display: flex; flex-direction: column;
       align-items: center;
       padding: 0.9rem 1.4rem 0.7rem;
@@ -136,7 +136,7 @@
 
     .serial-badge {
       position: absolute; top: 0.7rem; left: 0.8rem;
-      background: #FFD700; color: #000;
+      background: #cc0000; color: #fff;
       font-size: 0.7rem; font-weight: bold;
       padding: 0.15rem 0.5rem;
       border-radius: 4px;
@@ -146,11 +146,11 @@
     .hero-photo-frame {
       width: 260px; height: 260px;
       border-radius: 50%;
-      border: 4px solid #FFD700;
+      border: 4px solid #ff4444;
       overflow: hidden;
       flex-shrink: 0;
       margin-top: 1.8rem;
-      box-shadow: 0 0 32px #FFD70055, 0 0 8px #FFD70088;
+      box-shadow: 0 0 32px #ff444455, 0 0 8px #ff444488;
     }
     .hero-photo-frame img {
       width: 100%; height: 100%;
@@ -159,7 +159,7 @@
 
     .hero-name {
       font-size: 1.5rem; font-weight: bold;
-      color: #FFD700;
+      color: #fff;
       text-align: center;
       margin-top: 1.4rem;
       text-transform: uppercase;
@@ -176,7 +176,7 @@
     .gold-line {
       width: 85%;
       border: none;
-      border-top: 1px solid #FFD70055;
+      border-top: 1px solid #ff444455;
       margin: 1rem 0;
     }
 
@@ -194,7 +194,7 @@
       margin-bottom: 0.45rem;
     }
     .hero-details .detail-label {
-      color: #FFD700;
+      color: #ff8888;
       font-weight: bold;
       white-space: nowrap;
       min-width: unset;
@@ -209,7 +209,7 @@
       margin-top: auto;
       padding-top: 0.4rem;
       font-size: 0.9rem;
-      color: #FFD700aa;
+      color: #ff6666aa;
       letter-spacing: 0.1em;
       text-align: center;
       text-transform: uppercase;
@@ -219,16 +219,16 @@
     /* ── Back cover ── */
     .back-cover {
       width: 700px; height: 960px;
-      background: linear-gradient(160deg, #0d1b0d 0%, #1a3a1a 50%, #0d1b0d 100%);
+      background: linear-gradient(160deg, #1a0000 0%, #4a0000 50%, #1a0000 100%);
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
       gap: 1.2rem; padding: 2rem;
       box-sizing: border-box;
       text-align: center;
-      border-left: 3px solid #FFD70088;
+      border-left: 3px solid #ff444488;
     }
     .back-cover img { width: 80px; opacity: 0.7; }
-    .back-cover p { color: #888; font-size: 0.85rem; font-style: italic; line-height: 1.7; }
+    .back-cover p { color: #ffbbbb; font-size: 0.85rem; font-style: italic; line-height: 1.7; }
   </style>
 </head>
 <body style="display:flex; flex-direction:column; min-height:100vh;">
@@ -281,12 +281,12 @@
               ultimate sacrifices shall never be forgotten.
             </p>
             <hr class="intro-divider" />
-            <p style="color:#FFD700; font-style:italic;">
+            <p style="color:#ff8888; font-style:italic;">
               "The greatest tribute we can offer is to remember them, honour their
               memory, and continue the mission they gave their lives for."
             </p>
             <hr class="intro-divider" />
-            <p style="color:#888; font-size:0.82rem;">
+            <p style="color:#ffaaaa; font-size:0.82rem;">
               Use the arrows above or click the page edges to turn pages.
             </p>
           </div>
@@ -345,7 +345,7 @@
               We honour your sacrifice.<br>
               We pledge to carry forward your legacy.
             </p>
-            <p style="color:#FFD70088; font-size:0.78rem;">
+            <p style="color:#ff666688; font-size:0.78rem;">
               National Drug Law Enforcement Agency<br>
               Republic of Nigeria
             </p>
