@@ -197,7 +197,16 @@
       text-align: center;
       text-transform: uppercase;
     }
-    .candle-icon { font-size: 1.3rem; }
+    /* Mask to hide empty/peeking side page when book is closed */
+    #cover-mask {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      background: #1a0000;
+      pointer-events: none;
+      z-index: 20;
+      display: none;
+    }
 
     .back-cover {
       width: 700px; height: 960px;
@@ -214,6 +223,8 @@
   </style>
 </head>
 <body style="display:flex; flex-direction:column; min-height:100vh;">
+
+  <div id="cover-mask"></div>
 
   <div class="memorial-header">
     <img src="static/images/ndlea-logo.png" alt="NDLEA Logo" />
@@ -3178,16 +3189,27 @@
   <script src="static/js/turnjs4/extras/modernizr.2.5.3.min.js"></script>
   <script src="static/js/turnjs4/lib/turn.js"></script>
   <script>
+    var mask = document.getElementById('cover-mask');
+
     function recenter() {
       var page  = $('.flipbook').turn('page');
       var pages = $('.flipbook').turn('pages');
       var half  = 1400 / 4;
       if (page === 1) {
         $('.flipbook').css('transform', 'translateX(-' + half + 'px)');
+        // Hide the peeking intro page on the left
+        mask.style.display = 'block';
+        mask.style.left  = '0';
+        mask.style.right = 'calc(50% - 350px)';
       } else if (page === pages) {
         $('.flipbook').css('transform', 'translateX(' + half + 'px)');
+        // Hide the peeking hero page on the right
+        mask.style.display = 'block';
+        mask.style.left  = 'calc(50% + 350px)';
+        mask.style.right = '0';
       } else {
         $('.flipbook').css('transform', 'translateX(0)');
+        mask.style.display = 'none';
       }
     }
 
@@ -3200,6 +3222,14 @@
         autoCenter: false,
       });
       recenter();
+      // Hide mask and reset transform during flip animation
+      $('.flipbook').bind('turning', function(e, page) {
+        mask.style.display = 'none';
+        var pages = $(this).turn('pages');
+        if (page !== 1 && page !== pages) {
+          $(this).css('transform', 'translateX(0)');
+        }
+      });
       $('.flipbook').bind('turned', function () { recenter(); });
       $(document).keydown(function (e) {
         if (e.key === 'ArrowRight' || e.key === 'ArrowDown') $('.flipbook').turn('next');
