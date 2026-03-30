@@ -42,6 +42,8 @@
       align-items: center;
       flex: 1;
       padding: 0.5rem 0 1rem;
+      background:
+        radial-gradient(ellipse 80% 70% at 50% 50%, #2a0000 0%, #0d0000 70%, #000 100%);
     }
     .container {
       width: auto !important;
@@ -69,7 +71,8 @@
       padding: 2rem;
       text-align: center;
       position: relative;
-      box-shadow: 0 0 60px 18px rgba(255,255,255,0.18), 0 0 120px 40px rgba(255,255,255,0.08);
+      box-shadow: 0 0 60px 18px rgba(255,255,255,0.18), 0 0 120px 40px rgba(255,255,255,0.08),
+                  0 8px 40px 8px rgba(0,0,0,0.7);
     }
     /* Book spine indicator on the binding (left) edge */
     .cover-page::before {
@@ -131,7 +134,11 @@
       box-sizing: border-box;
       text-align: center;
       gap: 1.2rem;
-      box-shadow: 0 0 60px 18px rgba(255,255,255,0.18), 0 0 120px 40px rgba(255,255,255,0.08);
+      border: 1px solid #ff444433;
+      box-shadow:
+        0 0 60px 18px rgba(255,255,255,0.18),
+        0 0 120px 40px rgba(255,255,255,0.08),
+        0 8px 40px 8px rgba(0,0,0,0.7);
     }
     .intro-page h2 { color: #ff6666; font-size: 1.65rem; margin: 0; }
     .intro-page p { color: #eee; font-size: 1.05rem; line-height: 1.8; margin: 0; }
@@ -146,6 +153,11 @@
       box-sizing: border-box;
       position: relative;
       overflow: hidden;
+      border: 1px solid #ff444433;
+      box-shadow:
+        0 0 60px 18px rgba(255,255,255,0.18),
+        0 0 120px 40px rgba(255,255,255,0.08),
+        0 8px 40px 8px rgba(0,0,0,0.7);
     }
     .hero-page::before {
       content: '';
@@ -239,7 +251,8 @@
       box-sizing: border-box;
       text-align: center;
       border-left: 3px solid #ff444488;
-      box-shadow: 0 0 60px 18px rgba(255,255,255,0.18), 0 0 120px 40px rgba(255,255,255,0.08);
+      box-shadow: 0 0 60px 18px rgba(255,255,255,0.18), 0 0 120px 40px rgba(255,255,255,0.08),
+                  0 8px 40px 8px rgba(0,0,0,0.7);
     }
     .back-cover img { width: 80px; opacity: 0.7; }
     .back-cover p { color: #ffbbbb; font-size: 0.85rem; font-style: italic; line-height: 1.7; }
