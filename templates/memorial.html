@@ -39,27 +39,6 @@
     @keyframes shimmer { to { background-position: 200% center; } }
 
     /* Page navigation */
-    .nav-bar {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 1.5rem;
-      padding: 0.5rem;
-      position: relative;
-      z-index: 10;
-    }
-    .nav-bar button {
-      background: rgba(255,215,0,0.15);
-      border: 1px solid #FFD700;
-      color: #FFD700;
-      padding: 0.4rem 1.2rem;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.95rem;
-      transition: background 0.2s;
-    }
-    .nav-bar button:hover { background: rgba(255,215,0,0.35); }
-    #pageInfo { color: #ccc; font-size: 0.9rem; min-width: 120px; text-align: center; }
 
     /* Flipbook wrapper */
     .flipbook-viewport {
@@ -266,13 +245,6 @@
     <img src="{{ url_for('static', filename='images/ndlea-logo.png') }}" alt="NDLEA Logo" />
   </div>
 
-  <!-- Navigation bar -->
-  <div class="nav-bar">
-    <button id="prevBtn">&#9664; Prev</button>
-    <span id="pageInfo">Page 1 of {{ heroes|length + 2 }}</span>
-    <button id="nextBtn">Next &#9654;</button>
-  </div>
-
   <!-- Flipbook -->
   <div class="flipbook-viewport" style="min-height:calc(100vh - 110px);">
     <div class="container">
@@ -394,22 +366,14 @@
     function recenter() {
       var page  = $('.flipbook').turn('page');
       var pages = $('.flipbook').turn('pages');
-      var half  = 1400 / 4; // 350px = half of one page
+      var half  = 1400 / 4;
       if (page === 1) {
-        // Front cover sits in right half → shift container left to center it
         $('.flipbook').css('transform', 'translateX(-' + half + 'px)');
       } else if (page === pages) {
-        // Back cover sits in left half → shift container right to center it
         $('.flipbook').css('transform', 'translateX(' + half + 'px)');
       } else {
         $('.flipbook').css('transform', 'translateX(0)');
       }
-    }
-
-    function updatePageInfo() {
-      var current = $('.flipbook').turn('page');
-      document.getElementById('pageInfo').textContent =
-        'Page ' + current + ' of ' + totalPages;
     }
 
     function loadApp() {
@@ -424,9 +388,8 @@
       // Apply initial centering (book starts on page 1 = closed)
       recenter();
 
-      // Update info and re-center on every page turn
+      // Re-center on every page turn
       $('.flipbook').bind('turned', function () {
-        updatePageInfo();
         recenter();
       });
 
@@ -437,13 +400,6 @@
       });
     }
 
-    // Button navigation
-    document.getElementById('nextBtn').addEventListener('click', function () {
-      $('.flipbook').turn('next');
-    });
-    document.getElementById('prevBtn').addEventListener('click', function () {
-      $('.flipbook').turn('previous');
-    });
 
     yepnope({
       test: Modernizr.csstransforms,
