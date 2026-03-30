@@ -3272,12 +3272,15 @@
   <script src="static/js/turnjs4/extras/modernizr.2.5.3.min.js"></script>
   <script src="static/js/turnjs4/lib/turn.js"></script>
   <script>
+    var _bookScale = 1;
+
     function scaleBook() {
       var headerH = $('.memorial-header').outerHeight(true) || 110;
       var availW  = window.innerWidth  * 0.88;
       var availH  = (window.innerHeight - headerH - 16) * 0.92;
       var scale   = Math.min(availW / 1400, availH / 960);
       scale = Math.max(0.3, Math.min(scale, 1.5));
+      _bookScale = scale;
       var dw = Math.round((1400 * scale - 1400) / 2);
       var dh = Math.round((960  * scale - 960)  / 2);
       $('.flipbook-scale-wrapper').css({
@@ -3337,6 +3340,33 @@
         if (e.key === 'ArrowRight' || e.key === 'ArrowDown') $('.flipbook').turn('next');
         if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   $('.flipbook').turn('previous');
       });
+      // Remap pointer coordinates from visual (scaled) space into turn.js's
+      // logical 1400×960 space so corner-drag and click detection work at any scale.
+      function remapPointerEvent(e) {
+        if (Math.abs(_bookScale - 1) < 0.005) return;
+        var rect     = $('.flipbook')[0].getBoundingClientRect();
+        var scrollX  = window.pageXOffset || 0;
+        var scrollY  = window.pageYOffset || 0;
+        var posLeft  = rect.left + scrollX;
+        var posTop   = rect.top  + scrollY;
+        var src      = (e.touches && e.touches[0]) ? e.touches[0] : e;
+        var newPageX = posLeft + (src.pageX - posLeft) / _bookScale;
+        var newPageY = posTop  + (src.pageY - posTop)  / _bookScale;
+        function patch(obj) {
+          try {
+            Object.defineProperty(obj, 'pageX', { get: function() { return newPageX; }, configurable: true });
+            Object.defineProperty(obj, 'pageY', { get: function() { return newPageY; }, configurable: true });
+          } catch(ex) {}
+        }
+        patch(e);
+        if (e.touches && e.touches[0]) { patch(e.touches[0]); }
+      }
+      var fb = $('.flipbook')[0];
+      fb.addEventListener('mousedown', remapPointerEvent, true);
+      fb.addEventListener('mousemove', remapPointerEvent, true);
+      fb.addEventListener('touchstart', remapPointerEvent, true);
+      fb.addEventListener('touchmove',  remapPointerEvent, true);
+
       scaleBook();
       $(window).on('resize', scaleBook);
     }
