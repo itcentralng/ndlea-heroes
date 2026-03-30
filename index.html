@@ -3334,32 +3334,33 @@
         if (e.key === 'ArrowRight' || e.key === 'ArrowDown') $('.flipbook').turn('next');
         if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   $('.flipbook').turn('previous');
       });
-      // Remap pointer coordinates from visual (scaled) space into turn.js's
-      // logical 1400×960 space so corner-drag and click detection work at any scale.
-      function remapPointerEvent(e) {
-        if (Math.abs(_bookScale - 1) < 0.005) return;
-        var rect     = $('.flipbook')[0].getBoundingClientRect();
-        var scrollX  = window.pageXOffset || 0;
-        var scrollY  = window.pageYOffset || 0;
-        var posLeft  = rect.left + scrollX;
-        var posTop   = rect.top  + scrollY;
-        var src      = (e.touches && e.touches[0]) ? e.touches[0] : e;
-        var newPageX = posLeft + (src.pageX - posLeft) / _bookScale;
-        var newPageY = posTop  + (src.pageY - posTop)  / _bookScale;
-        function patch(obj) {
-          try {
-            Object.defineProperty(obj, 'pageX', { get: function() { return newPageX; }, configurable: true });
-            Object.defineProperty(obj, 'pageY', { get: function() { return newPageY; }, configurable: true });
-          } catch(ex) {}
+      // Remap mouse event coordinates from visual (scaled) space into turn.js's
+      // logical 1400×960 space. We hook into jQuery's fixHooks so the remapped
+      // values land on the jQuery.Event object that turn.js actually reads.
+      // Object.defineProperty on native events is non-configurable in Chrome,
+      // which is why this approach is used instead of patching native events.
+      (function() {
+        function makeRemapHook(original) {
+          return {
+            props:  (original && original.props)  ? original.props.slice() : [],
+            filter: function(event, native) {
+              if (original && original.filter) original.filter.call(this, event, native);
+              if (Math.abs(_bookScale - 1) < 0.005) return event;
+              var wrapper = document.querySelector('.flipbook-scale-wrapper');
+              if (!wrapper || !native.target || !wrapper.contains(native.target)) return event;
+              var rect    = document.querySelector('.flipbook').getBoundingClientRect();
+              var posLeft = rect.left + (window.pageXOffset || 0);
+              var posTop  = rect.top  + (window.pageYOffset || 0);
+              event.pageX = posLeft + (event.pageX - posLeft) / _bookScale;
+              event.pageY = posTop  + (event.pageY - posTop)  / _bookScale;
+              return event;
+            }
+          };
         }
-        patch(e);
-        if (e.touches && e.touches[0]) { patch(e.touches[0]); }
-      }
-      var fb = $('.flipbook')[0];
-      fb.addEventListener('mousedown', remapPointerEvent, true);
-      fb.addEventListener('mousemove', remapPointerEvent, true);
-      fb.addEventListener('touchstart', remapPointerEvent, true);
-      fb.addEventListener('touchmove',  remapPointerEvent, true);
+        $.each(['mousedown', 'mousemove', 'mouseup'], function(_, type) {
+          $.event.fixHooks[type] = makeRemapHook($.event.fixHooks[type] || $.event.mouseHooks);
+        });
+      }());
 
       scaleBook();
       $(window).on('resize', scaleBook);
