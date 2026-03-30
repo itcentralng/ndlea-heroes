@@ -77,7 +77,10 @@
       align-items: center !important;
       position: static !important;
     }
-    .flipbook { position: relative; }
+    .flipbook {
+      position: relative;
+      transition: transform 0.6s ease;
+    }
 
     /* ── Cover page ── */
     .cover-page {
@@ -388,6 +391,21 @@
   <script>
     var totalPages = {{ heroes|length + 4 }}; // cover + intro + heroes + back cover
 
+    function recenter() {
+      var page  = $('.flipbook').turn('page');
+      var pages = $('.flipbook').turn('pages');
+      var half  = 1400 / 4; // 350px = half of one page
+      if (page === 1) {
+        // Front cover sits in right half → shift container left to center it
+        $('.flipbook').css('transform', 'translateX(-' + half + 'px)');
+      } else if (page === pages) {
+        // Back cover sits in left half → shift container right to center it
+        $('.flipbook').css('transform', 'translateX(' + half + 'px)');
+      } else {
+        $('.flipbook').css('transform', 'translateX(0)');
+      }
+    }
+
     function updatePageInfo() {
       var current = $('.flipbook').turn('page');
       document.getElementById('pageInfo').textContent =
@@ -400,11 +418,17 @@
         height: 960,
         elevation: 50,
         gradients: true,
-        autoCenter: true,
+        autoCenter: false,
       });
 
-      // Update info on page turn
-      $('.flipbook').bind('turned', function () { updatePageInfo(); });
+      // Apply initial centering (book starts on page 1 = closed)
+      recenter();
+
+      // Update info and re-center on every page turn
+      $('.flipbook').bind('turned', function () {
+        updatePageInfo();
+        recenter();
+      });
 
       // Keyboard navigation
       $(document).keydown(function (e) {
