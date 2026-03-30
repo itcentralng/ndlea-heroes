@@ -3335,24 +3335,67 @@
         if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   $('.flipbook').turn('previous');
       });
       // Remap mouse event coordinates from visual (scaled) space into turn.js's
-      // logical 1400×960 space. We hook into jQuery's fixHooks so the remapped
+      // logical page space. We hook into jQuery's fixHooks so the remapped
       // values land on the jQuery.Event object that turn.js actually reads.
-      // Object.defineProperty on native events is non-configurable in Chrome,
-      // which is why this approach is used instead of patching native events.
+      //
+      // IMPORTANT: turn.js subtracts each page's individual .page-wrapper
+      // offset() when computing the local hotspot position — NOT the .flipbook
+      // offset().  For the left page the two happen to coincide, so left→right
+      // flips worked.  For the right page the wrapper starts at
+      // flipbook.left + 700×scale, so anchoring off the flipbook caused the
+      // remapped x to always be ≥ 700 (the page width) and be rejected as
+      // out-of-bounds.  Fix: anchor each remap off the containing .page-wrapper.
       (function() {
+        var _dragPageWrapper = null;
+
+        function pageWrapperOf(target, scaleWrapper) {
+          var el = target;
+          while (el && el !== scaleWrapper) {
+            if (el.classList && el.classList.contains('page-wrapper')) return el;
+            el = el.parentElement;
+          }
+          return null;
+        }
+
+        function anchorOf(pw) {
+          if (!pw) return null;
+          var r = pw.getBoundingClientRect();
+          return { left: r.left + (window.pageXOffset || 0),
+                   top:  r.top  + (window.pageYOffset || 0) };
+        }
+
         function makeRemapHook(original) {
           return {
             props:  (original && original.props)  ? original.props.slice() : [],
             filter: function(event, native) {
               if (original && original.filter) original.filter.call(this, event, native);
               if (Math.abs(_bookScale - 1) < 0.005) return event;
-              var wrapper = document.querySelector('.flipbook-scale-wrapper');
-              if (!wrapper || !native.target || !wrapper.contains(native.target)) return event;
-              var rect    = document.querySelector('.flipbook').getBoundingClientRect();
-              var posLeft = rect.left + (window.pageXOffset || 0);
-              var posTop  = rect.top  + (window.pageYOffset || 0);
-              event.pageX = posLeft + (event.pageX - posLeft) / _bookScale;
-              event.pageY = posTop  + (event.pageY - posTop)  / _bookScale;
+              var scaleWrapper = document.querySelector('.flipbook-scale-wrapper');
+              if (!scaleWrapper) return event;
+
+              var anchor = null;
+
+              if (native.type === 'mousedown') {
+                if (!native.target || !scaleWrapper.contains(native.target)) return event;
+                _dragPageWrapper = pageWrapperOf(native.target, scaleWrapper);
+                anchor = anchorOf(_dragPageWrapper);
+              } else if (native.type === 'mousemove') {
+                if (_dragPageWrapper) {
+                  // During a drag: re-query position so the fold tracks correctly
+                  // even while the page-wrapper is animating.
+                  anchor = anchorOf(_dragPageWrapper);
+                } else if (native.target && scaleWrapper.contains(native.target)) {
+                  // Hover preview: find the wrapper from the current target.
+                  anchor = anchorOf(pageWrapperOf(native.target, scaleWrapper));
+                }
+              } else { // mouseup
+                anchor = anchorOf(_dragPageWrapper);
+                _dragPageWrapper = null;
+              }
+
+              if (!anchor) return event;
+              event.pageX = anchor.left + (event.pageX - anchor.left) / _bookScale;
+              event.pageY = anchor.top  + (event.pageY - anchor.top)  / _bookScale;
               return event;
             }
           };
