@@ -750,9 +750,8 @@
       text-transform: uppercase;
       pointer-events: none;
     }
-  </style>
-</head>
-<body>
+
+    .cover-logo {
       width: 90px;
       height: 90px;
       object-fit: contain;
@@ -1091,16 +1090,45 @@
       text-transform: uppercase;
       pointer-events: none;
     }
+
+    /* ── Hero rank badge ──────────────────────────────────────── */
+    .hero-rank {
+      font-family: var(--sans);
+      font-size: 0.58rem;
+      font-weight: 700;
+      color: var(--red);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      opacity: 0.78;
+    }
+
+    /* ── TOC interaction ──────────────────────────────────────── */
+    .toc-entry { cursor: pointer; transition: opacity 0.15s; }
+    .toc-entry:active { opacity: 0.6; }
+    .toc-entry:hover .toc-name { color: var(--gold-lt); }
+
+    /* ── No-transition helper for instant jumps ───────────────── */
+    .no-transition { transition: none !important; }
   </style>
 </head>
 <body>
 
 <div class="book-wrap" id="bookWrap">
   <!-- Pages are injected by JS -->
-  <span class="swipe-hint">Swipe or tap arrows to turn pages</span>
+  <span class="swipe-hint">Swipe or tap to turn pages</span>
 </div>
 
-
+<nav class="nav-bar" id="navBar">
+  <div class="nav-progress"><div class="nav-progress-fill" id="progressFill"></div></div>
+  <button class="nav-btn" id="btnPrev" aria-label="Previous page">
+    <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
+  </button>
+  <span class="page-counter" id="pageCounter">Cover</span>
+  <button class="nav-btn" id="btnNext" aria-label="Next page">
+    <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+  </button>
+</nav>
 
 <script>
   // ── Hero data ──────────────────────────────────────────────────
@@ -1878,6 +1906,16 @@
     return `images/heroes/${serial}.jpg`;
   }
 
+  // Try .jpg → .png → placeholder
+  function imgError(el, serial) {
+    if (!el.dataset.tried) {
+      el.dataset.tried = '1';
+      el.src = `images/heroes/${serial}.png`;
+    } else {
+      el.src = 'images/placeholder.jpg';
+    }
+  }
+
   function makeFlamePair() {
     return `
       <div class="flame-wrap">
@@ -1916,6 +1954,44 @@
       </div>`;
     bookWrap.appendChild(coverPage);
 
+    // ── TOC page ──────────────────────────────────────────────────
+    const tocPage = document.createElement('div');
+    tocPage.className = 'page';
+    tocPage.dataset.index = '1';
+    const chunkSize = Math.ceil(heroes.length / 3);
+    const tocCols = [
+      heroes.slice(0, chunkSize),
+      heroes.slice(chunkSize, chunkSize * 2),
+      heroes.slice(chunkSize * 2)
+    ];
+    const tocColsHtml = tocCols.map(col =>
+      `<div class="toc-col">${col.map(h =>
+        `<div class="toc-entry" data-goto="${h.serial + 1}">
+          <span class="toc-num">${h.serial}.</span>
+          <span class="toc-name">${h.name}</span>
+          <span class="toc-year">${(h.dateOfDeath.match(/\d{4}/) || [''])[0]}</span>
+        </div>`).join('')}</div>`
+    ).join('');
+    tocPage.innerHTML = `
+      <div class="face face-front toc-face">
+        <div class="toc-ribbon">
+          <span class="toc-ribbon-title">Roll of Honour</span>
+          <span class="toc-ribbon-count">${heroes.length} Heroes</span>
+        </div>
+        <div class="toc-body">
+          <div class="toc-grid">${tocColsHtml}</div>
+        </div>
+        <div class="toc-footer">
+          <div class="toc-foot-rule"></div>
+          <span class="toc-footer-text">Tap a name to honour them</span>
+          <div class="toc-foot-rule"></div>
+        </div>
+      </div>
+      <div class="face face-back hero-face" style="justify-content:center;align-items:center;">
+        <span style="color:rgba(255,255,255,0.15);font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;">Turn back</span>
+      </div>`;
+    bookWrap.appendChild(tocPage);
+
     // Hero pages
     heroes.forEach((hero, i) => {
       const pg = document.createElement('div');
@@ -1933,12 +2009,13 @@
           <div class="hero-photo-wrap">
             <div class="hero-photo-frame">
               <img src="${imgSrc}" alt="${hero.name}"
-                   onerror="this.src='images/placeholder.jpg'">
+                   onerror="imgError(this,${hero.serial})">
             </div>
           </div>
           <div class="hero-info">
             <div class="hero-name">${hero.name}</div>
             <div class="hero-service-no">${hero.serviceNo}</div>
+            <div class="hero-rank">${hero.rank}</div>
             <div class="hero-divider"></div>
             <div class="hero-detail-grid">
               <div class="detail-row">
@@ -1999,7 +2076,6 @@
   function updateUI() {
     pages.forEach((pg, i) => {
       pg.classList.remove('active');
-      // Pages before current are flipped and hidden behind
       if (i < current) {
         pg.classList.add('flipped');
         pg.style.zIndex = i;
@@ -2012,11 +2088,35 @@
         pg.style.zIndex = total - i;
       }
     });
+    // ── Nav bar ─────────────────────────────────────────────────
+    const counter = document.getElementById('pageCounter');
+    const fill    = document.getElementById('progressFill');
+    const btnPrev = document.getElementById('btnPrev');
+    const btnNext = document.getElementById('btnNext');
+    if (counter) {
+      if      (current === 0)          counter.textContent = 'Cover';
+      else if (current === 1)          counter.textContent = 'Contents';
+      else if (current === total - 1)  counter.textContent = '— End —';
+      else                             counter.textContent = `${current - 1} / ${heroes.length}`;
+    }
+    if (fill)    fill.style.width = ((current / (total - 1)) * 100) + '%';
+    if (btnPrev) btnPrev.disabled = (current === 0);
+    if (btnNext) btnNext.disabled = (current === total - 1);
+  }
+
+  function jumpToPage(idx) {
+    if (idx < 0 || idx >= total) return;
+    current = idx;
+    // Snap instantly — disable transitions for one paint cycle
+    pages.forEach(pg => pg.classList.add('no-transition'));
+    updateUI();
+    requestAnimationFrame(() => requestAnimationFrame(() =>
+      pages.forEach(pg => pg.classList.remove('no-transition'))
+    ));
   }
 
   function goNext() {
     if (current >= total - 1) return;
-    // Flip the current page away
     pages[current].classList.add('flipped');
     pages[current].style.zIndex = current;
     current++;
@@ -2034,21 +2134,45 @@
     updateUI();
   }
 
-  // Tap on page face to advance
-  bookWrap.addEventListener('click', (e) => {
-    if (!e.target.closest('.nav-btn')) goNext();
+  // ── Nav button wiring ──────────────────────────────────────────
+  document.getElementById('btnPrev').addEventListener('click', goPrev);
+  document.getElementById('btnNext').addEventListener('click', goNext);
+
+  // ── Keyboard navigation ────────────────────────────────────────
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goNext();
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   goPrev();
   });
 
-  // ── Swipe support ──────────────────────────────────────────────
-  let touchStartX = 0;
+  // ── Click handling (tap zones + TOC jump) ─────────────────────
+  bookWrap.addEventListener('click', (e) => {
+    if (e.target.closest('.nav-btn')) return;
+    // TOC entry → jump to that hero's page
+    const entry = e.target.closest('.toc-entry');
+    if (entry) {
+      const target = parseInt(entry.dataset.goto, 10);
+      if (!isNaN(target)) jumpToPage(target);
+      return;
+    }
+    // Tap zones: left 35% → back, right 65% → forward
+    const rect = bookWrap.getBoundingClientRect();
+    const relX = (e.clientX - rect.left) / rect.width;
+    if (relX < 0.35) goPrev();
+    else             goNext();
+  });
+
+  // ── Swipe support (with velocity) ─────────────────────────────
+  let touchStartX = 0, touchStartTime = 0;
   bookWrap.addEventListener('touchstart', (e) => {
-    touchStartX = e.changedTouches[0].clientX;
+    touchStartX    = e.changedTouches[0].clientX;
+    touchStartTime = Date.now();
   }, { passive: true });
   bookWrap.addEventListener('touchend', (e) => {
-    const dx = e.changedTouches[0].clientX - touchStartX;
-    if (Math.abs(dx) < 40) return;
+    const dx       = e.changedTouches[0].clientX - touchStartX;
+    const velocity = Math.abs(dx) / Math.max(1, Date.now() - touchStartTime);
+    if (Math.abs(dx) < 30 && velocity < 0.3) return;
     if (dx < 0) goNext();
-    else         goPrev();
+    else        goPrev();
   }, { passive: true });
 
   // ── Init ───────────────────────────────────────────────────────
