@@ -3200,7 +3200,7 @@
         // Hide the peeking intro page on the left
         mask.style.display = 'block';
         mask.style.left  = '0';
-        mask.style.right = 'calc(50% - 350px)';
+        mask.style.right = 'calc(50% + 350px)';
       } else if (page === pages) {
         $('.flipbook').css('transform', 'translateX(' + half + 'px)');
         // Hide the peeking hero page on the right
@@ -3214,6 +3214,8 @@
     }
 
     function loadApp() {
+      // Suppress the CSS transition during first positioning to avoid the load-time slide
+      $('.flipbook').css('transition', 'none');
       $('.flipbook').turn({
         width: 1400,
         height: 960,
@@ -3222,6 +3224,10 @@
         autoCenter: false,
       });
       recenter();
+      // Re-enable transition after the initial position is painted
+      setTimeout(function () {
+        $('.flipbook').css('transition', '');
+      }, 50);
       // Hide mask and reset transform during flip animation
       $('.flipbook').bind('turning', function(e, page) {
         mask.style.display = 'none';
