@@ -3174,6 +3174,7 @@
 
   <script src="static/js/turnjs4/extras/jquery.min.1.7.js"></script>
   <script src="static/js/turnjs4/extras/modernizr.2.5.3.min.js"></script>
+  <script src="static/js/turnjs4/lib/turn.js"></script>
   <script>
     function recenter() {
       var page  = $('.flipbook').turn('page');
@@ -3204,13 +3205,7 @@
       });
     }
 
-    yepnope({
-      test: Modernizr.csstransforms,
-      yep:  ['static/js/turnjs4/lib/turn.js'],
-      nope: ['static/js/turnjs4/lib/turn.html4.min.js'],
-      both: ['static/js/turnjs4/samples/basic/css/basic.css'],
-      complete: loadApp,
-    });
+    loadApp();
   </script>
 </body>
 </html>
