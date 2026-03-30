@@ -1,0 +1,765 @@
+{
+      serial: 1,
+      name: "Gabriel Uyi Musa",
+      rank: "NA",
+      serviceNo: "NA/6309",
+      dateOfDeath: "4th September, 2006",
+      causeOfDeath: "Murdered during a raid operation",
+      placeOfDeath: "Eguara, Edo State Command"
+    },
+    {
+      serial: 2,
+      name: "Bashir Iliyasu",
+      rank: "ASN II",
+      serviceNo: "SP/10633",
+      dateOfDeath: "23rd May, 2022",
+      causeOfDeath: "Road traffic accident during operation",
+      placeOfDeath: "Along Okene/Lokoja Highway, Kogi State Command"
+    },
+    {
+      serial: 3,
+      name: "Isaiah Danjuma Maji",
+      rank: "ASN II",
+      serviceNo: "SP/2696",
+      dateOfDeath: "28th October, 2004",
+      causeOfDeath: "Killed by mob attack in the course of operation",
+      placeOfDeath: "Kabo Village, Kano State Command"
+    },
+    {
+      serial: 4,
+      name: "Ahmed Abdul-Hadi Ibrahim",
+      rank: "CSN",
+      serviceNo: "SP/6782",
+      dateOfDeath: "4th October, 2024",
+      causeOfDeath: "Drowned to death during a raid operation",
+      placeOfDeath: "Doma Road, Lafia, Nasarawa State Command"
+    },
+    {
+      serial: 5,
+      name: "Abba Samuel Sunday",
+      rank: "NA",
+      serviceNo: "NA/7940",
+      dateOfDeath: "6th October, 2020",
+      causeOfDeath: "Killed during operation",
+      placeOfDeath: "Hong, Adamawa State Command"
+    },
+    {
+      serial: 6,
+      name: "Ogunjemilua O. Sunday",
+      rank: "ASN II",
+      serviceNo: "SP/1717",
+      dateOfDeath: "27th June, 2012",
+      causeOfDeath: "Killed by a hit and run driver during stop and search",
+      placeOfDeath: "Sokoto Command"
+    },
+    {
+      serial: 7,
+      name: "Ahmed Abubakar",
+      rank: "NA",
+      serviceNo: "NA/7346",
+      dateOfDeath: "20th August, 2016",
+      causeOfDeath: "Drowned in a river at Gwanje water side during official assignment",
+      placeOfDeath: "Maiduguri, Borno Command"
+    },
+    {
+      serial: 8,
+      name: "Onwumere Nicholas Ude",
+      rank: "ASN II",
+      serviceNo: "SP/6536",
+      dateOfDeath: "13th October, 2017",
+      causeOfDeath: "Killed by unknown gunmen during stop and search motorized patrol",
+      placeOfDeath: "Kogi Command"
+    },
+    {
+      serial: 9,
+      name: "Oraegbunam Anthony Jekwu",
+      rank: "NA",
+      serviceNo: "2738",
+      dateOfDeath: "1st November, 1994",
+      causeOfDeath: "Died from gunshot wounds as a result of accidental discharge from the rifle he was handling",
+      placeOfDeath: "Zonal Command Office, Kano"
+    },
+    {
+      serial: 10,
+      name: "Odunlami Jide Joshua",
+      rank: "NA",
+      serviceNo: "NA/17056",
+      dateOfDeath: "22nd July, 2025",
+      causeOfDeath: "Gunshot during operation",
+      placeOfDeath: "Ondo State Command"
+    },
+    {
+      serial: 11,
+      name: "Yakubu Isaiah Isaac",
+      rank: "CNA",
+      serviceNo: "SP/6676",
+      dateOfDeath: "19th September, 2023",
+      causeOfDeath: "Mob attack by unknown gunmen in the course of joint task force operation",
+      placeOfDeath: "Mbaino Local Government Area, Imo State"
+    },
+    {
+      serial: 12,
+      name: "Kyune Emmanuel",
+      rank: "ASN I",
+      serviceNo: "SP/7668",
+      dateOfDeath: "10th January, 2025",
+      causeOfDeath: "Head injury sustained in accident on his way back from a raid operation",
+      placeOfDeath: "Aba, Owerri Road, Abia State Command"
+    },
+    {
+      serial: 13,
+      name: "Joshua Ishaku",
+      rank: "CNA",
+      serviceNo: "6347",
+      dateOfDeath: "15th June, 2014",
+      causeOfDeath: "Mob attack",
+      placeOfDeath: "Owode-Yewa, Ogun State"
+    },
+    {
+      serial: 14,
+      name: "Ogun Sunday Kayode",
+      rank: "CNA",
+      serviceNo: "SP/6251",
+      dateOfDeath: "15th March, 2022",
+      causeOfDeath: "Died as a result of gunshot wounds by unknown gunmen",
+      placeOfDeath: "Agency State Headquarters, Ebonyi State"
+    },
+    {
+      serial: 15,
+      name: "Nemuel Adams",
+      rank: "SNA",
+      serviceNo: "SN/8082",
+      dateOfDeath: "24th April, 2019",
+      causeOfDeath: "Killed by a hit and run driver while on patrol",
+      placeOfDeath: "Abakaliki, Ebonyi State Command"
+    },
+    {
+      serial: 16,
+      name: "Adegoke Emmanuel A.",
+      rank: "CNA",
+      serviceNo: "SN/4009",
+      dateOfDeath: "28th August, 2008",
+      causeOfDeath: "Knocked down and died during operation",
+      placeOfDeath: "Damaturu Gashua Road, Yobe State Command"
+    },
+    {
+      serial: 17,
+      name: "Famakinwa Temidayo",
+      rank: "NA II",
+      serviceNo: "NA/2167",
+      dateOfDeath: "1st June, 1992",
+      causeOfDeath: "Died as a result of gunshot wounds sustained during official duty in special task force unit",
+      placeOfDeath: "Lagos Command"
+    },
+    {
+      serial: 18,
+      name: "Samuel Allau",
+      rank: "NA",
+      serviceNo: "NA/3193",
+      dateOfDeath: "23rd January, 1998",
+      causeOfDeath: "Crushed to death at checkpoint while on duty",
+      placeOfDeath: "Aliade Area, Benue State"
+    },
+    {
+      serial: 19,
+      name: "Ukpong Ini Edward",
+      rank: "ASN II",
+      serviceNo: "PF/4220",
+      dateOfDeath: "22nd January, 1999",
+      causeOfDeath: "Mob attack in a follow-up operation",
+      placeOfDeath: "Akala, Mushin Area, Lagos Command"
+    },
+    {
+      serial: 20,
+      name: "Mbre Thomas",
+      rank: "ASN I",
+      serviceNo: "SP/625",
+      dateOfDeath: "11th September, 2017",
+      causeOfDeath: "Illness due to complications from mob attack",
+      placeOfDeath: "Lagos State Command"
+    },
+    {
+      serial: 21,
+      name: "Ahmed Bala",
+      rank: "SNA",
+      serviceNo: "SP/8195",
+      dateOfDeath: "14th September, 2025",
+      causeOfDeath: "Head injuries sustained from road traffic accident while returning from an operation",
+      placeOfDeath: "Kogi State Command"
+    },
+    {
+      serial: 22,
+      name: "Adolphus Basil",
+      rank: "CNA",
+      serviceNo: "5134",
+      dateOfDeath: "17th December, 1998",
+      causeOfDeath: "Killed at the road checkpoint",
+      placeOfDeath: "Kano Zone Command"
+    },
+    {
+      serial: 23,
+      name: "Sulaiman Bello Chindo",
+      rank: "CNA",
+      serviceNo: "4994",
+      dateOfDeath: "9th September, 2000",
+      causeOfDeath: "Had accident on his way from surveillance on a motorbike",
+      placeOfDeath: "Abeokuta"
+    },
+    {
+      serial: 24,
+      name: "Ian A. Aondowase",
+      rank: "ASN II",
+      serviceNo: "SP/293",
+      dateOfDeath: "8th July, 1998",
+      causeOfDeath: "Mob attack during an operation",
+      placeOfDeath: "Borno State Command"
+    },
+    {
+      serial: 25,
+      name: "Abdulmalik Ibrahim",
+      rank: "NA",
+      serviceNo: "11541",
+      dateOfDeath: "28th December, 2025",
+      causeOfDeath: "Severe injuries sustained from mob attack",
+      placeOfDeath: "Adamawa State Command"
+    },
+    {
+      serial: 26,
+      name: "Oraegbunam Anthony Jekwu",
+      rank: "NA",
+      serviceNo: "NA/2738",
+      dateOfDeath: "2nd July, 1995",
+      causeOfDeath: "Died from gunshot wounds as a result of accidental discharge",
+      placeOfDeath: "Zonal Command Office, Kano"
+    },
+    {
+      serial: 27,
+      name: "Joseph Akpa Danjuma",
+      rank: "ASN I",
+      serviceNo: "SP/1172",
+      dateOfDeath: "9th March, 1996",
+      causeOfDeath: "Died as a result of a mob attack in the course of operation",
+      placeOfDeath: "Katsina State Command"
+    },
+    {
+      serial: 28,
+      name: "Olawepo Ademola T.",
+      rank: "SNA",
+      serviceNo: "2982",
+      dateOfDeath: "23rd February, 1997",
+      causeOfDeath: "Died in the course of an operation",
+      placeOfDeath: "Imo State Command"
+    },
+    {
+      serial: 29,
+      name: "Akinyele Isaac Durotimi",
+      rank: "NASS I",
+      serviceNo: "SN/9301",
+      dateOfDeath: "18th October, 2022",
+      causeOfDeath: "Died due to head injury in the course of a raid operation",
+      placeOfDeath: "Ondo State Command"
+    },
+    {
+      serial: 30,
+      name: "Musa Abduljalal S.",
+      rank: "ASN II",
+      serviceNo: "SP/5958",
+      dateOfDeath: "17th February, 2019",
+      causeOfDeath: "Killed by an unknown gunman in the course of official duty",
+      placeOfDeath: "Ondo State Command"
+    },
+    {
+      serial: 31,
+      name: "Jume Aminu",
+      rank: "NA",
+      serviceNo: "17407",
+      dateOfDeath: "18th July, 2025",
+      causeOfDeath: "Died as a result of mob attack during operation where he sustained injuries",
+      placeOfDeath: "Jigawa"
+    },
+    {
+      serial: 32,
+      name: "Usman Kassim",
+      rank: "SN",
+      serviceNo: "SP/3273",
+      dateOfDeath: "23rd July, 2005",
+      causeOfDeath: "Died during promotional exams",
+      placeOfDeath: "Academy's Medical Clinic, Jos"
+    },
+    {
+      serial: 33,
+      name: "Allen M. Asor",
+      rank: "SN",
+      serviceNo: "SP/1361",
+      dateOfDeath: "21st March, 2012",
+      causeOfDeath: "Killed during mob attack",
+      placeOfDeath: "Adamawa State Command"
+    },
+    {
+      serial: 34,
+      name: "Wibe Dum Wieezor",
+      rank: "CSN",
+      serviceNo: "1132",
+      dateOfDeath: "23rd August, 2002",
+      causeOfDeath: "Died as a result of gunshot by armed robbers",
+      placeOfDeath: "Onitsha, Anambra State Command"
+    },
+    {
+      serial: 35,
+      name: "Hassan A.",
+      rank: "CNA",
+      serviceNo: "5036",
+      dateOfDeath: "28th November, 2004",
+      causeOfDeath: "Died in the course of an operation",
+      placeOfDeath: "Kabo, Kano State"
+    },
+    {
+      serial: 36,
+      name: "Galadima Bissala T.",
+      rank: "NA",
+      serviceNo: "NA/8431",
+      dateOfDeath: "9th March, 2013",
+      causeOfDeath: "Died after conveying officers back to the office after an official assignment",
+      placeOfDeath: "Abaji Area Command, FCT"
+    },
+    {
+      serial: 37,
+      name: "Ikusemoro Phillips Kokumo",
+      rank: "ASN I",
+      serviceNo: "SP/6594",
+      dateOfDeath: "26th March, 2020",
+      causeOfDeath: "Killed by a hit and run vehicle in the course of official assignment",
+      placeOfDeath: "Sokoto"
+    },
+    {
+      serial: 38,
+      name: "Afolabi Azeez Adekunle",
+      rank: "SNA",
+      serviceNo: "NA/7912",
+      dateOfDeath: "25th January, 2024",
+      causeOfDeath: "Vehicle accident during official assignment",
+      placeOfDeath: "N/A"
+    },
+    {
+      serial: 39,
+      name: "Christopher D. Igelle",
+      rank: "SNA",
+      serviceNo: "SNA/2389",
+      dateOfDeath: "11th June, 2001",
+      causeOfDeath: "Gunshot during operation",
+      placeOfDeath: "Oyo State Command"
+    },
+    {
+      serial: 40,
+      name: "Musa Abdullarahaman",
+      rank: "NA",
+      serviceNo: "7610",
+      dateOfDeath: "13th October, 2017",
+      causeOfDeath: "Attack at the patrol checkpoint by unknown gunmen",
+      placeOfDeath: "Okene"
+    },
+    {
+      serial: 41,
+      name: "Rabiu Usman Kazaure",
+      rank: "DSN",
+      serviceNo: "2867",
+      dateOfDeath: "15th June, 2014",
+      causeOfDeath: "Mob attack while carrying out official duties",
+      placeOfDeath: "Ogun State Command"
+    },
+    {
+      serial: 42,
+      name: "Wassa Maic Awak",
+      rank: "ASN II",
+      serviceNo: "2438",
+      dateOfDeath: "18th January, 2001",
+      causeOfDeath: "Mob attack during operation",
+      placeOfDeath: "Calabar Zonal Command"
+    },
+    {
+      serial: 43,
+      name: "Iliyasu Mohammed",
+      rank: "NASS II",
+      serviceNo: "8034",
+      dateOfDeath: "17th February, 2019",
+      causeOfDeath: "Gunshot while performing official duties",
+      placeOfDeath: "Ondo State Command"
+    },
+    {
+      serial: 44,
+      name: "Bulus Leo Dam",
+      rank: "ASN I",
+      serviceNo: "753",
+      dateOfDeath: "25th November, 1994",
+      causeOfDeath: "Motor accident in the course of official assignment",
+      placeOfDeath: "Ilorin / Warri"
+    },
+    {
+      serial: 45,
+      name: "Imran Aliyu",
+      rank: "ASN I",
+      serviceNo: "0635",
+      dateOfDeath: "14th February, 2025",
+      causeOfDeath: "Mob attack",
+      placeOfDeath: "Amana Village, along Kaduna-Jos Road"
+    },
+    {
+      serial: 46,
+      name: "Fynecontry Ihuoma Victory",
+      rank: "CNA",
+      serviceNo: "13237",
+      dateOfDeath: "19th January, 2023",
+      causeOfDeath: "Injuries sustained from road accident while returning from an operation",
+      placeOfDeath: "Ovia River Bridge, Benin-Lagos Road, Edo State"
+    },
+    {
+      serial: 47,
+      name: "Owolodun Bolaji",
+      rank: "SN",
+      serviceNo: "5674",
+      dateOfDeath: "15th June, 2016",
+      causeOfDeath: "Mob attack during operation",
+      placeOfDeath: "Owode Yewa, Ogun State"
+    },
+    {
+      serial: 48,
+      name: "Ante Wilson Effiong",
+      rank: "NA",
+      serviceNo: "7247",
+      dateOfDeath: "11th July, 2016",
+      causeOfDeath: "Mob attack",
+      placeOfDeath: "Outskirt of Uyo LGA, Akwa-Ibom State"
+    },
+    {
+      serial: 49,
+      name: "Ansellem Anayo O.",
+      rank: "SNA",
+      serviceNo: "6301",
+      dateOfDeath: "20th February, 2022",
+      causeOfDeath: "Killed on official motorized patrol by unknown attackers",
+      placeOfDeath: "Ebonyi"
+    },
+    {
+      serial: 50,
+      name: "Mbonu C. Charles",
+      rank: "ASN II",
+      serviceNo: "4676",
+      dateOfDeath: "22nd January, 2014",
+      causeOfDeath: "Killed during operation",
+      placeOfDeath: "Edo State Command"
+    },
+    {
+      serial: 51,
+      name: "Nasiru Ahmed Kotagora",
+      rank: "SN",
+      serviceNo: "3008",
+      dateOfDeath: "24th December, 2019",
+      causeOfDeath: "Knocked and killed during stop and search operations",
+      placeOfDeath: "Niger State Command"
+    },
+    {
+      serial: 52,
+      name: "Olatunde Akinwale",
+      rank: "CSN",
+      serviceNo: "273",
+      dateOfDeath: "11th January, 2012",
+      causeOfDeath: "Killed while preparing to go to work",
+      placeOfDeath: "Idiroko Special Area Command"
+    },
+    {
+      serial: 53,
+      name: "Atti Abighe Usman",
+      rank: "CNA",
+      serviceNo: "3783",
+      dateOfDeath: "23rd February, 1997",
+      causeOfDeath: "Mob attack",
+      placeOfDeath: "Obosima, Imo State"
+    },
+    {
+      serial: 54,
+      name: "Magaji Aliyu",
+      rank: "CNA",
+      serviceNo: "6930",
+      dateOfDeath: "17th February, 2019",
+      causeOfDeath: "Killed by unknown gunmen in the course of operation",
+      placeOfDeath: "Ifon Area Command, Ondo State"
+    },
+    {
+      serial: 55,
+      name: "Kenneth Love-Day Tarikoro",
+      rank: "CNA",
+      serviceNo: "3952",
+      dateOfDeath: "21st May, 2009",
+      causeOfDeath: "Gunshot during operation",
+      placeOfDeath: "Abbi Town, Delta State"
+    },
+    {
+      serial: 56,
+      name: "Bolaji I. Raufu",
+      rank: "NASS II",
+      serviceNo: "3306",
+      dateOfDeath: "18th March, 2004",
+      causeOfDeath: "Gunshot during operation",
+      placeOfDeath: "Kontagora Area Command, Niger"
+    },
+    {
+      serial: 57,
+      name: "Uwakwe Celestine Amauche",
+      rank: "SNA",
+      serviceNo: "8361",
+      dateOfDeath: "5th May, 2020",
+      causeOfDeath: "Killed by gunmen suspected to be kidnappers in the course of official assignment",
+      placeOfDeath: "Mbaitoli LGA, Imo State"
+    },
+    {
+      serial: 58,
+      name: "Abanum Edeli Raymond",
+      rank: "NA",
+      serviceNo: "7391",
+      dateOfDeath: "3rd January, 2017",
+      causeOfDeath: "Killed and hit by a driver in the course of official assignment",
+      placeOfDeath: "Delta State Command"
+    },
+    {
+      serial: 59,
+      name: "Wakili D. Kusaki",
+      rank: "DSN",
+      serviceNo: "4834",
+      dateOfDeath: "14th February, 2015",
+      causeOfDeath: "Shot by unknown gunmen suspected to be Boko Haram while on duty",
+      placeOfDeath: "Gombe State Command Headquarters"
+    },
+    {
+      serial: 60,
+      name: "Mohammed Umar",
+      rank: "CNA",
+      serviceNo: "2722",
+      dateOfDeath: "18th February, 2000",
+      causeOfDeath: "Mob attack during operations",
+      placeOfDeath: "Garki, Abuja"
+    },
+    {
+      serial: 61,
+      name: "Lawal Mohammed Ado",
+      rank: "NASS III",
+      serviceNo: "4528",
+      dateOfDeath: "21st March, 1998",
+      causeOfDeath: "Motor accident",
+      placeOfDeath: "Birnin Gwari Checkpoint, Kaduna"
+    },
+    {
+      serial: 62,
+      name: "Ogbonnewo Emmanuel O.",
+      rank: "SNA",
+      serviceNo: "8063",
+      dateOfDeath: "29th October, 2018",
+      causeOfDeath: "Killed by a hit and run driver in the course of official duty",
+      placeOfDeath: "Ringim Road, Jigawa State Command"
+    },
+    {
+      serial: 63,
+      name: "Abbati Shamsudeen Bello",
+      rank: "NA",
+      serviceNo: "6232",
+      dateOfDeath: "21st May, 2005",
+      causeOfDeath: "Gunshot wounds from attack during operation",
+      placeOfDeath: "Abbi Town, Delta State"
+    },
+    {
+      serial: 64,
+      name: "Bawa Iyah Danjuma",
+      rank: "DSN",
+      serviceNo: "3012",
+      dateOfDeath: "25th April, 2014",
+      causeOfDeath: "Attacked during the course of lawful operation",
+      placeOfDeath: "Uhrongbe Village, Edo State"
+    },
+    {
+      serial: 65,
+      name: "Chiwatalu Kingsley Ifeanyi",
+      rank: "SN",
+      serviceNo: "6758",
+      dateOfDeath: "9th March, 2024",
+      causeOfDeath: "Stabbed on his neck by unknown men in military uniform",
+      placeOfDeath: "Niger State"
+    },
+    {
+      serial: 66,
+      name: "Sadiq Bako Mujahid",
+      rank: "CNA",
+      serviceNo: "23/NA/16378",
+      dateOfDeath: "6th February, 2026",
+      causeOfDeath: "Killed during operation",
+      placeOfDeath: "Bonny Island, Port Harcourt, Rivers State Command"
+    },
+    {
+      serial: 67,
+      name: "Bolarinwa I. Olapoju",
+      rank: "NA",
+      serviceNo: "5958",
+      dateOfDeath: "3rd May, 2000",
+      causeOfDeath: "Died as a result of mob attack",
+      placeOfDeath: "Ejigbo, Osun State"
+    },
+    {
+      serial: 68,
+      name: "Kuponu M. Oladeji",
+      rank: "ASN II",
+      serviceNo: "SP/234",
+      dateOfDeath: "4th October, 1991",
+      causeOfDeath: "Died in a fatal accident in the course of an official assignment",
+      placeOfDeath: "Kano Zone"
+    },
+    {
+      serial: 69,
+      name: "Olojo Ajoade",
+      rank: "NA",
+      serviceNo: "2058",
+      dateOfDeath: "1st June, 1995",
+      causeOfDeath: "Mob attack in the course of official assignment",
+      placeOfDeath: "Kangiwa Village, Kebbi Zone"
+    },
+    {
+      serial: 70,
+      name: "Adegbemi Jamiu",
+      rank: "NA",
+      serviceNo: "3719",
+      dateOfDeath: "6th April, 1999",
+      causeOfDeath: "Killed in the course of official assignment",
+      placeOfDeath: "Ope-Iu Village, Ogun State"
+    },
+    {
+      serial: 71,
+      name: "Suleiman A. Lawal",
+      rank: "NA",
+      serviceNo: "2918",
+      dateOfDeath: "12th November, 1996",
+      causeOfDeath: "Shot while on duty",
+      placeOfDeath: "Lagos Badagry Expressway Command, Lagos Zone"
+    },
+    {
+      serial: 72,
+      name: "Areneth Williams",
+      rank: "NA",
+      serviceNo: "563",
+      dateOfDeath: "27th July, 1998",
+      causeOfDeath: "Killed by accidental discharge in the course of an operation",
+      placeOfDeath: "Wukari, Taraba"
+    },
+    {
+      serial: 73,
+      name: "Orukotan Joseph",
+      rank: "NA",
+      serviceNo: "2999",
+      dateOfDeath: "22nd November, 1998",
+      causeOfDeath: "Abducted by cannabis farmers during the course of duty; missing since then",
+      placeOfDeath: "Warri Zone, Delta State"
+    },
+    {
+      serial: 74,
+      name: "Kusimo O. Kolawole",
+      rank: "NA",
+      serviceNo: "321",
+      dateOfDeath: "20th March, 1999",
+      causeOfDeath: "Kidnapped in the course of an operation; whereabouts unknown",
+      placeOfDeath: "Olushi Village, Edo State"
+    },
+    {
+      serial: 75,
+      name: "Adogu Solomon",
+      rank: "NASS II",
+      serviceNo: "3808",
+      dateOfDeath: "22nd November, 1998",
+      causeOfDeath: "Abducted by cannabis farmers in the course of official assignment; missing since then",
+      placeOfDeath: "Warri, Warri Zone"
+    },
+    {
+      serial: 76,
+      name: "Ariwayo B. Sunday",
+      rank: "NA",
+      serviceNo: "5003",
+      dateOfDeath: "23rd March, 1999",
+      causeOfDeath: "Kidnapped along with two officers in the course of an operation",
+      placeOfDeath: "Olushi Village, Benin"
+    },
+    {
+      serial: 77,
+      name: "Osasogie Omobude",
+      rank: "NA",
+      serviceNo: "827",
+      dateOfDeath: "22nd June, 1996",
+      causeOfDeath: "Stabbed to death on his way to NDLEA Office for night shift duty",
+      placeOfDeath: "Calabar, Calabar Zone"
+    },
+    {
+      serial: 78,
+      name: "Abdu Gudaji",
+      rank: "NA",
+      serviceNo: "2869",
+      dateOfDeath: "26th September, 1997",
+      causeOfDeath: "Killed in the course of official assignment",
+      placeOfDeath: "Warri, Warri Zone"
+    },
+    {
+      serial: 79,
+      name: "Anyanwu G. Echeazu",
+      rank: "NA",
+      serviceNo: "330",
+      dateOfDeath: "20th February, 1997",
+      causeOfDeath: "Mob attack in the course of a follow-up operation",
+      placeOfDeath: "Obosima Village, Onitsha Zone"
+    },
+    {
+      serial: 80,
+      name: "Soje Y. S.",
+      rank: "Senior Counselling Officer",
+      serviceNo: "4416",
+      dateOfDeath: "27th July, 1998",
+      causeOfDeath: "Died in a motor accident while returning from Kogi State on official assignment",
+      placeOfDeath: "Lokoja Road, Makurdi Zone"
+    },
+    {
+      serial: 81,
+      name: "Offor Christiana",
+      rank: "NA",
+      serviceNo: "3216",
+      dateOfDeath: "20th March, 1999",
+      causeOfDeath: "Kidnapped along with two officers in the course of a follow-up operation to arrest a suspect",
+      placeOfDeath: "Olushi Village, Edo State"
+    },
+    {
+      serial: 82,
+      name: "Ifejika Samuel",
+      rank: "Senior Narcotic Intelligence Officer",
+      serviceNo: "729",
+      dateOfDeath: "25th November, 1994",
+      causeOfDeath: "Died in a motor accident along with three officers while on assignment",
+      placeOfDeath: "N/A"
+    },
+    {
+      serial: 83,
+      name: "Audu Musa",
+      rank: "NASS II",
+      serviceNo: "1229",
+      dateOfDeath: "17th August, 1993",
+      causeOfDeath: "Attacked and shot by armed robbers while on official duty",
+      placeOfDeath: "Idiroko Border Post"
+    },
+    {
+      serial: 84,
+      name: "Atti A. Usman",
+      rank: "CNA",
+      serviceNo: "3783",
+      dateOfDeath: "23rd February, 1997",
+      causeOfDeath: "Mob attack in the course of a follow-up operation to effect an arrest",
+      placeOfDeath: "Obosima Village, Imo State"
+    },
+    {
+      serial: 85,
+      name: "Shehu Aliyu",
+      rank: "NA",
+      serviceNo: "21/NA/13394",
+      dateOfDeath: "11th January, 2023",
+      causeOfDeath: "Killed in a mob attack while on operations to arrest a drug suspect",
+      placeOfDeath: "Bagarawa Village, Bodinga Area Command, Sokoto State"
+    }
