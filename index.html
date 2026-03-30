@@ -54,7 +54,7 @@
       position: static !important;
     }
     .flipbook-scale-wrapper {
-      width: 1400px;
+      width: 700px;
       height: 960px;
       transform-origin: center center;
       flex-shrink: 0;
@@ -3272,11 +3272,11 @@
       var headerH = $('.memorial-header').outerHeight(true) || 110;
       var availW  = window.innerWidth  * 0.88;
       var availH  = (window.innerHeight - headerH - 16) * 0.92;
-      var scale   = Math.min(availW / 1400, availH / 960);
+      var scale   = Math.min(availW / 700, availH / 960);
       scale = Math.max(0.3, Math.min(scale, 1.5));
       _bookScale = scale;
-      var dw = Math.round((1400 * scale - 1400) / 2);
-      var dh = Math.round((960  * scale - 960)  / 2);
+      var dw = Math.round((700 * scale - 700) / 2);
+      var dh = Math.round((960 * scale - 960) / 2);
       $('.flipbook-scale-wrapper').css({
         transform:       'scale(' + scale + ')',
         'margin-left':   dw + 'px',
@@ -3289,13 +3289,12 @@
     function recenter() {
       var page  = $('.flipbook').turn('page');
       var pages = $('.flipbook').turn('pages');
-      var half  = 1400 / 4;
       if (page === 1) {
-        $('.flipbook').css('transform', 'perspective(2500px) translateX(-' + half + 'px) rotateY(8deg)');
+        $('.flipbook').css('transform', 'perspective(2500px) rotateY(6deg)');
       } else if (page === pages) {
-        $('.flipbook').css('transform', 'perspective(2500px) translateX(' + half + 'px) rotateY(-8deg)');
+        $('.flipbook').css('transform', 'perspective(2500px) rotateY(-6deg)');
       } else {
-        $('.flipbook').css('transform', 'perspective(2500px) translateX(0) rotateY(0deg)');
+        $('.flipbook').css('transform', 'perspective(2500px) rotateY(0deg)');
       }
     }
 
@@ -3303,8 +3302,9 @@
       // Suppress the CSS transition during first positioning to avoid the load-time slide
       $('.flipbook').css('transition', 'none');
       $('.flipbook').turn({
-        width: 1400,
+        width: 700,
         height: 960,
+        display: 'single',
         elevation: 50,
         gradients: true,
         autoCenter: false,
@@ -3316,14 +3316,8 @@
       }, 50);
       // Flatten 3-D tilt during flip animation, restore after
       $('.flipbook').bind('turning', function(e, page) {
-        var $this = $(this), pages = $this.turn('pages'), half = 1400 / 4;
-        if (page !== 1 && page !== pages) {
-          $this.css('transform', 'perspective(2500px) translateX(0) rotateY(0deg)');
-        } else if (page === 1) {
-          $this.css('transform', 'perspective(2500px) translateX(-' + half + 'px) rotateY(0deg)');
-        } else {
-          $this.css('transform', 'perspective(2500px) translateX(' + half + 'px) rotateY(0deg)');
-        }
+        var $this = $(this);
+        $this.css('transform', 'perspective(2500px) rotateY(0deg)');
         if (page !== 1) { $('.flipbook-viewport').addClass('book-opened'); }
       });
       $('.flipbook').bind('turned', function(e, page) {
