@@ -13,16 +13,17 @@
     /* Header */
     .memorial-header {
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 1.5rem;
-      padding: 0.8rem 1rem;
+      gap: 0.5rem;
+      padding: 1rem 1rem 0.7rem;
       background: rgba(0,0,0,0.65);
       backdrop-filter: blur(4px);
       position: relative;
       z-index: 10;
     }
-    .memorial-header img { width: 58px; }
+    .memorial-header img { width: 72px; }
     .memorial-title {
       text-align: center;
       text-transform: uppercase;
@@ -242,7 +243,6 @@
   <div class="memorial-header">
     <img src="{{ url_for('static', filename='images/ndlea-logo.png') }}" alt="NDLEA Logo" />
     <div class="memorial-title">NDLEA Fallen Heroes Memorial Book</div>
-    <img src="{{ url_for('static', filename='images/ndlea-logo.png') }}" alt="NDLEA Logo" />
   </div>
 
   <!-- Flipbook -->
