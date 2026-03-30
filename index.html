@@ -1,0 +1,3217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NDLEA Fallen Heroes Memorial Book</title>
+  <link rel="stylesheet" href="static/css/register.css" />
+  <link href="static/images/ndlea-logo.png" rel="shortcut icon" type="image/x-icon" />
+  <style>
+    body { background: #1a0000; color: #fff; font-family: 'Georgia', serif; }
+
+    .memorial-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 1rem 1rem 0.7rem;
+      background: rgba(100,0,0,0.75);
+      backdrop-filter: blur(4px);
+      position: relative;
+      z-index: 10;
+    }
+    .memorial-header img { width: 72px; }
+    .memorial-title {
+      text-align: center;
+      text-transform: uppercase;
+      background-image: linear-gradient(-225deg, #ff4444 0%, #fff 30%, #ff4444 60%, #fff 100%);
+      background-size: 200% auto;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shimmer 6s linear infinite;
+      font-size: 1.6rem;
+      font-weight: bold;
+      letter-spacing: 0.06em;
+    }
+    @keyframes shimmer { to { background-position: 200% center; } }
+
+    .flipbook-viewport {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex: 1;
+      padding: 0.5rem 0 1rem;
+    }
+    .container {
+      width: auto !important;
+      height: auto !important;
+      display: flex !important;
+      justify-content: center !important;
+      align-items: center !important;
+      position: static !important;
+    }
+    .flipbook {
+      position: relative;
+      transition: transform 0.6s ease;
+    }
+
+    .cover-page {
+      width: 700px; height: 960px;
+      background: linear-gradient(160deg, #1a0000 0%, #4a0000 50%, #1a0000 100%);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 1.2rem;
+      border-right: 3px solid #ff444488;
+      box-sizing: border-box;
+      padding: 2rem;
+      text-align: center;
+    }
+    .cover-page img { width: 220px; filter: drop-shadow(0 0 18px #ff444466); }
+    .cover-title {
+      font-size: 2.4rem; font-weight: bold; color: #fff;
+      text-shadow: 0 0 20px #ff444455;
+      line-height: 1.35;
+    }
+    .cover-sub {
+      font-size: 1rem; color: #ffaaaa; letter-spacing: 0.08em;
+      border-top: 1px solid #ff444455;
+      border-bottom: 1px solid #ff444455;
+      padding: 0.5rem 1.5rem;
+    }
+    .cover-count { font-size: 0.85rem; color: #ffbbbb; }
+    .cover-flame {
+      font-size: 2.8rem;
+      animation: flicker 2.5s ease-in-out infinite alternate;
+    }
+    @keyframes flicker {
+      0%   { text-shadow: 0 0 8px #ff6600, 0 0 20px #ff6600; opacity: 1; }
+      50%  { text-shadow: 0 0 4px #ff4400, 0 0 10px #ff4400; opacity: 0.85; }
+      100% { text-shadow: 0 0 12px #ff8800, 0 0 30px #ff8800; opacity: 1; }
+    }
+
+    .intro-page {
+      width: 700px; height: 960px;
+      background: linear-gradient(170deg, #1a0000 0%, #2e0000 100%);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 2rem 2.5rem;
+      box-sizing: border-box;
+      text-align: center;
+      gap: 1.2rem;
+    }
+    .intro-page h2 { color: #ff6666; font-size: 1.65rem; margin: 0; }
+    .intro-page p { color: #eee; font-size: 1.05rem; line-height: 1.8; margin: 0; }
+    .intro-divider { width: 80%; border: none; border-top: 1px solid #ff444455; }
+
+    .hero-page {
+      width: 700px; height: 960px;
+      background: linear-gradient(170deg, #1a0000 0%, #2a0000 60%, #1a0000 100%);
+      display: flex; flex-direction: column;
+      align-items: center;
+      padding: 0.9rem 1.4rem 0.7rem;
+      box-sizing: border-box;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-page::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("static/images/ndlea-logo.png") center/220px no-repeat;
+      opacity: 0.04;
+      pointer-events: none;
+    }
+    .serial-badge {
+      position: absolute; top: 0.7rem; left: 0.8rem;
+      background: #cc0000; color: #fff;
+      font-size: 0.7rem; font-weight: bold;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+    }
+    .hero-photo-frame {
+      width: 260px; height: 260px;
+      border-radius: 50%;
+      border: 4px solid #ff4444;
+      overflow: hidden;
+      flex-shrink: 0;
+      margin-top: 1.8rem;
+      box-shadow: 0 0 32px #ff444455, 0 0 8px #ff444488;
+    }
+    .hero-photo-frame img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: top center;
+    }
+    .hero-name {
+      font-size: 1.5rem; font-weight: bold;
+      color: #fff;
+      text-align: center;
+      margin-top: 1.4rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      line-height: 1.25;
+    }
+    .hero-rank-row {
+      display: flex; gap: 1rem;
+      font-size: 0.88rem; color: #aaa;
+      margin-top: 0.6rem;
+    }
+    .hero-rank-row span { color: #ddd; font-weight: bold; }
+    .gold-line {
+      width: 85%;
+      border: none;
+      border-top: 1px solid #ff444455;
+      margin: 1rem 0;
+    }
+    .hero-details {
+      width: 100%;
+      font-size: 1rem;
+      color: #ccc;
+      line-height: 1.7;
+      text-align: center;
+    }
+    .hero-details .detail-row {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 0.45rem;
+    }
+    .hero-details .detail-label {
+      color: #ff8888;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+    .hero-details .detail-value {
+      color: #ddd;
+      word-break: break-word;
+      text-align: center;
+    }
+    .tribute {
+      margin-top: auto;
+      padding-top: 0.4rem;
+      font-size: 0.9rem;
+      color: #ff6666aa;
+      letter-spacing: 0.1em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+    .candle-icon { font-size: 1.3rem; }
+
+    .back-cover {
+      width: 700px; height: 960px;
+      background: linear-gradient(160deg, #1a0000 0%, #4a0000 50%, #1a0000 100%);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 1.2rem; padding: 2rem;
+      box-sizing: border-box;
+      text-align: center;
+      border-left: 3px solid #ff444488;
+    }
+    .back-cover img { width: 80px; opacity: 0.7; }
+    .back-cover p { color: #ffbbbb; font-size: 0.85rem; font-style: italic; line-height: 1.7; }
+  </style>
+</head>
+<body style="display:flex; flex-direction:column; min-height:100vh;">
+
+  <div class="memorial-header">
+    <img src="static/images/ndlea-logo.png" alt="NDLEA Logo" />
+    <div class="memorial-title">NDLEA Fallen Heroes Memorial Book</div>
+  </div>
+
+  <div class="flipbook-viewport" style="min-height:calc(100vh - 110px);">
+    <div class="container">
+      <div class="flipbook">
+
+        <div class="hard">
+          <div class="cover-page">
+            <div class="cover-flame">&#x1F56F;</div>
+            <img src="static/images/ndlea-logo.png" alt="NDLEA" />
+            <div class="cover-title">
+              National Drug Law<br>Enforcement Agency
+            </div>
+            <div class="cover-sub">FALLEN HEROES MEMORIAL BOOK</div>
+            <div class="cover-count">
+              85 Officers who gave their lives<br>in the line of duty
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="intro-page">
+            <h2>In Honoured Memory</h2>
+            <hr class="intro-divider" />
+            <p>
+              This memorial book is dedicated to the brave officers and men of the
+              National Drug Law Enforcement Agency (NDLEA) who made the supreme
+              sacrifice in service to Nigeria and humanity.
+            </p>
+            <p>
+              They stood on the front lines of the war against drug trafficking,
+              facing danger without flinching. Their courage, dedication, and
+              ultimate sacrifices shall never be forgotten.
+            </p>
+            <hr class="intro-divider" />
+            <p style="color:#ff8888; font-style:italic;">
+              &#8220;The greatest tribute we can offer is to remember them, honour their
+              memory, and continue the mission they gave their lives for.&#8221;
+            </p>
+            <hr class="intro-divider" />
+            <p style="color:#ffaaaa; font-size:0.82rem;">
+              Click the page edges to turn pages, or use the arrow keys.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 1</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/1.jpg" alt="Gabriel Uyi Musa" />
+            </div>
+            <div class="hero-name">Gabriel Uyi Musa</div>
+            <div class="hero-rank-row">
+              <span>NA</span>
+              &mdash;
+              <span>NA/6309</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">4th September, 2006</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Murdered during a raid operation</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Eguara, Edo State Command</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 2</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/2.jpg" alt="Bashir Iliyasu" />
+            </div>
+            <div class="hero-name">Bashir Iliyasu</div>
+            <div class="hero-rank-row">
+              <span>ASN II</span>
+              &mdash;
+              <span>SP/10633</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">23rd May, 2022</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Road traffic accident during operation</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Along Okene/Lokoja Highway, Kogi State Command</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 3</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/3.jpg" alt="Isaiah Danjuma Maji" />
+            </div>
+            <div class="hero-name">Isaiah Danjuma Maji</div>
+            <div class="hero-rank-row">
+              <span>ASN II</span>
+              &mdash;
+              <span>SP/2696</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">28th October, 2004</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Killed by mob attack in the course of operation</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Kabo Village, Kano State Command</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 4</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/4.jpg" alt="Ahmed Abdul-Hadi Ibrahim" />
+            </div>
+            <div class="hero-name">Ahmed Abdul-Hadi Ibrahim</div>
+            <div class="hero-rank-row">
+              <span>CSN</span>
+              &mdash;
+              <span>SP/6782</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">4th October, 2024</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Drowned to death during a raid operation</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Doma Road, Lafia, Nasarawa State Command</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 5</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/5.jpg" alt="Abba Samuel Sunday" />
+            </div>
+            <div class="hero-name">Abba Samuel Sunday</div>
+            <div class="hero-rank-row">
+              <span>NA</span>
+              &mdash;
+              <span>NA/7940</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">6th October, 2020</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Killed during operation</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Hong, Adamawa State Command</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 6</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/6.jpg" alt="Ogunjemilua O. Sunday" />
+            </div>
+            <div class="hero-name">Ogunjemilua O. Sunday</div>
+            <div class="hero-rank-row">
+              <span>ASN II</span>
+              &mdash;
+              <span>SP/1717</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">27th June, 2012</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Killed by a hit and run driver during stop and search</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Sokoto Command</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 7</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/7.jpg" alt="Ahmed Abubakar" />
+            </div>
+            <div class="hero-name">Ahmed Abubakar</div>
+            <div class="hero-rank-row">
+              <span>NA</span>
+              &mdash;
+              <span>NA/7346</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">20th August, 2016</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Drowned in a river at Gwanje water side during official assignment</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Maiduguri, Borno Command</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 8</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/8.jpg" alt="Onwumere Nicholas Ude" />
+            </div>
+            <div class="hero-name">Onwumere Nicholas Ude</div>
+            <div class="hero-rank-row">
+              <span>ASN II</span>
+              &mdash;
+              <span>SP/6536</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">13th October, 2017</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Killed by unknown gunmen during stop and search motorized patrol</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Kogi Command</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 9</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/9.jpg" alt="Oraegbunam Anthony Jekwu" />
+            </div>
+            <div class="hero-name">Oraegbunam Anthony Jekwu</div>
+            <div class="hero-rank-row">
+              <span>NA</span>
+              &mdash;
+              <span>2738</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">1st November, 1994</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Died from gunshot wounds as a result of accidental discharge from the rifle he was handling</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Zonal Command Office, Kano</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 10</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/10.png" alt="Odunlami Jide Joshua" />
+            </div>
+            <div class="hero-name">Odunlami Jide Joshua</div>
+            <div class="hero-rank-row">
+              <span>NA</span>
+              &mdash;
+              <span>NA/17056</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">22nd July, 2025</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Gunshot during operation</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Ondo State Command</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 11</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/11.jpg" alt="Yakubu Isaiah Isaac" />
+            </div>
+            <div class="hero-name">Yakubu Isaiah Isaac</div>
+            <div class="hero-rank-row">
+              <span>CNA</span>
+              &mdash;
+              <span>SP/6676</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">19th September, 2023</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Mob attack by unknown gunmen in the course of joint task force operation</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Mbaino Local Government Area, Imo State</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 12</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/12.jpg" alt="Kyune Emmanuel" />
+            </div>
+            <div class="hero-name">Kyune Emmanuel</div>
+            <div class="hero-rank-row">
+              <span>ASN I</span>
+              &mdash;
+              <span>SP/7668</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">10th January, 2025</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Head injury sustained in accident on his way back from a raid operation</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Aba, Owerri Road, Abia State Command</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 13</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/13.png" alt="Joshua Ishaku" />
+            </div>
+            <div class="hero-name">Joshua Ishaku</div>
+            <div class="hero-rank-row">
+              <span>CNA</span>
+              &mdash;
+              <span>6347</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">15th June, 2014</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Mob attack</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Owode-Yewa, Ogun State</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 14</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/14.png" alt="Ogun Sunday Kayode" />
+            </div>
+            <div class="hero-name">Ogun Sunday Kayode</div>
+            <div class="hero-rank-row">
+              <span>CNA</span>
+              &mdash;
+              <span>SP/6251</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">15th March, 2022</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Died as a result of gunshot wounds by unknown gunmen</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Agency State Headquarters, Ebonyi State</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 15</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/15.jpg" alt="Nemuel Adams" />
+            </div>
+            <div class="hero-name">Nemuel Adams</div>
+            <div class="hero-rank-row">
+              <span>SNA</span>
+              &mdash;
+              <span>SN/8082</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">24th April, 2019</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Killed by a hit and run driver while on patrol</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Abakaliki, Ebonyi State Command</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 16</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/16.png" alt="Adegoke Emmanuel A." />
+            </div>
+            <div class="hero-name">Adegoke Emmanuel A.</div>
+            <div class="hero-rank-row">
+              <span>CNA</span>
+              &mdash;
+              <span>SN/4009</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">28th August, 2008</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Knocked down and died during operation</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Damaturu Gashua Road, Yobe State Command</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 17</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/placeholder.jpg" alt="Famakinwa Temidayo" />
+            </div>
+            <div class="hero-name">Famakinwa Temidayo</div>
+            <div class="hero-rank-row">
+              <span>NA II</span>
+              &mdash;
+              <span>NA/2167</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">1st June, 1992</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Died as a result of gunshot wounds sustained during official duty in special task force unit</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Lagos Command</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 18</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/placeholder.jpg" alt="Samuel Allau" />
+            </div>
+            <div class="hero-name">Samuel Allau</div>
+            <div class="hero-rank-row">
+              <span>NA</span>
+              &mdash;
+              <span>NA/3193</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">23rd January, 1998</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Crushed to death at checkpoint while on duty</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Aliade Area, Benue State</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 19</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/placeholder.jpg" alt="Ukpong Ini Edward" />
+            </div>
+            <div class="hero-name">Ukpong Ini Edward</div>
+            <div class="hero-rank-row">
+              <span>ASN II</span>
+              &mdash;
+              <span>PF/4220</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">22nd January, 1999</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Mob attack in a follow-up operation</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Akala, Mushin Area, Lagos Command</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 20</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/20.jpg" alt="Mbre Thomas" />
+            </div>
+            <div class="hero-name">Mbre Thomas</div>
+            <div class="hero-rank-row">
+              <span>ASN I</span>
+              &mdash;
+              <span>SP/625</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">11th September, 2017</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Illness due to complications from mob attack</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Lagos State Command</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 21</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/21.jpg" alt="Ahmed Bala" />
+            </div>
+            <div class="hero-name">Ahmed Bala</div>
+            <div class="hero-rank-row">
+              <span>SNA</span>
+              &mdash;
+              <span>SP/8195</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">14th September, 2025</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Head injuries sustained from road traffic accident while returning from an operation</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Kogi State Command</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 22</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/22.jpg" alt="Adolphus Basil" />
+            </div>
+            <div class="hero-name">Adolphus Basil</div>
+            <div class="hero-rank-row">
+              <span>CNA</span>
+              &mdash;
+              <span>5134</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">17th December, 1998</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Killed at the road checkpoint</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Kano Zone Command</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 23</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/23.jpg" alt="Sulaiman Bello Chindo" />
+            </div>
+            <div class="hero-name">Sulaiman Bello Chindo</div>
+            <div class="hero-rank-row">
+              <span>CNA</span>
+              &mdash;
+              <span>4994</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">9th September, 2000</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Had accident on his way from surveillance on a motorbike</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Abeokuta</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 24</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/24.jpg" alt="Ian A. Aondowase" />
+            </div>
+            <div class="hero-name">Ian A. Aondowase</div>
+            <div class="hero-rank-row">
+              <span>ASN II</span>
+              &mdash;
+              <span>SP/293</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">8th July, 1998</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Mob attack during an operation</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Borno State Command</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 25</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/25.jpg" alt="Abdulmalik Ibrahim" />
+            </div>
+            <div class="hero-name">Abdulmalik Ibrahim</div>
+            <div class="hero-rank-row">
+              <span>NA</span>
+              &mdash;
+              <span>11541</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">28th December, 2025</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Severe injuries sustained from mob attack</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Adamawa State Command</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 26</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/26.jpg" alt="Oraegbunam Anthony Jekwu" />
+            </div>
+            <div class="hero-name">Oraegbunam Anthony Jekwu</div>
+            <div class="hero-rank-row">
+              <span>NA</span>
+              &mdash;
+              <span>NA/2738</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">2nd July, 1995</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Died from gunshot wounds as a result of accidental discharge</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Zonal Command Office, Kano</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 27</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/27.png" alt="Joseph Akpa Danjuma" />
+            </div>
+            <div class="hero-name">Joseph Akpa Danjuma</div>
+            <div class="hero-rank-row">
+              <span>ASN I</span>
+              &mdash;
+              <span>SP/1172</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">9th March, 1996</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Died as a result of a mob attack in the course of operation</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Katsina State Command</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 28</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/28.jpg" alt="Olawepo Ademola T." />
+            </div>
+            <div class="hero-name">Olawepo Ademola T.</div>
+            <div class="hero-rank-row">
+              <span>SNA</span>
+              &mdash;
+              <span>2982</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">23rd February, 1997</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Died in the course of an operation</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Imo State Command</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 29</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/29.png" alt="Akinyele Isaac Durotimi" />
+            </div>
+            <div class="hero-name">Akinyele Isaac Durotimi</div>
+            <div class="hero-rank-row">
+              <span>NASS I</span>
+              &mdash;
+              <span>SN/9301</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">18th October, 2022</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Died due to head injury in the course of a raid operation</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Ondo State Command</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 30</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/30.jpg" alt="Musa Abduljalal S." />
+            </div>
+            <div class="hero-name">Musa Abduljalal S.</div>
+            <div class="hero-rank-row">
+              <span>ASN II</span>
+              &mdash;
+              <span>SP/5958</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">17th February, 2019</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Killed by an unknown gunman in the course of official duty</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Ondo State Command</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 31</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/31.png" alt="Jume Aminu" />
+            </div>
+            <div class="hero-name">Jume Aminu</div>
+            <div class="hero-rank-row">
+              <span>NA</span>
+              &mdash;
+              <span>17407</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">18th July, 2025</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Died as a result of mob attack during operation where he sustained injuries</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Jigawa</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 32</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/placeholder.jpg" alt="Usman Kassim" />
+            </div>
+            <div class="hero-name">Usman Kassim</div>
+            <div class="hero-rank-row">
+              <span>SN</span>
+              &mdash;
+              <span>SP/3273</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">23rd July, 2005</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Died during promotional exams</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Academy&#x27;s Medical Clinic, Jos</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 33</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/33.png" alt="Allen M. Asor" />
+            </div>
+            <div class="hero-name">Allen M. Asor</div>
+            <div class="hero-rank-row">
+              <span>SN</span>
+              &mdash;
+              <span>SP/1361</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">21st March, 2012</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Killed during mob attack</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Adamawa State Command</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 34</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/34.jpg" alt="Wibe Dum Wieezor" />
+            </div>
+            <div class="hero-name">Wibe Dum Wieezor</div>
+            <div class="hero-rank-row">
+              <span>CSN</span>
+              &mdash;
+              <span>1132</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">23rd August, 2002</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Died as a result of gunshot by armed robbers</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Onitsha, Anambra State Command</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 35</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/35.png" alt="Hassan A." />
+            </div>
+            <div class="hero-name">Hassan A.</div>
+            <div class="hero-rank-row">
+              <span>CNA</span>
+              &mdash;
+              <span>5036</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">28th November, 2004</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Died in the course of an operation</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Kabo, Kano State</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 36</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/36.jpg" alt="Galadima Bissala T." />
+            </div>
+            <div class="hero-name">Galadima Bissala T.</div>
+            <div class="hero-rank-row">
+              <span>NA</span>
+              &mdash;
+              <span>NA/8431</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">9th March, 2013</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Died after conveying officers back to the office after an official assignment</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Abaji Area Command, FCT</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 37</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/37.jpg" alt="Ikusemoro Phillips Kokumo" />
+            </div>
+            <div class="hero-name">Ikusemoro Phillips Kokumo</div>
+            <div class="hero-rank-row">
+              <span>ASN I</span>
+              &mdash;
+              <span>SP/6594</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">26th March, 2020</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Killed by a hit and run vehicle in the course of official assignment</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Sokoto</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 38</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/placeholder.jpg" alt="Afolabi Azeez Adekunle" />
+            </div>
+            <div class="hero-name">Afolabi Azeez Adekunle</div>
+            <div class="hero-rank-row">
+              <span>SNA</span>
+              &mdash;
+              <span>NA/7912</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">25th January, 2024</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Vehicle accident during official assignment</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">N/A</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 39</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/placeholder.jpg" alt="Christopher D. Igelle" />
+            </div>
+            <div class="hero-name">Christopher D. Igelle</div>
+            <div class="hero-rank-row">
+              <span>SNA</span>
+              &mdash;
+              <span>SNA/2389</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">11th June, 2001</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Gunshot during operation</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Oyo State Command</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 40</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/40.jpg" alt="Musa Abdullarahaman" />
+            </div>
+            <div class="hero-name">Musa Abdullarahaman</div>
+            <div class="hero-rank-row">
+              <span>NA</span>
+              &mdash;
+              <span>7610</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">13th October, 2017</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Attack at the patrol checkpoint by unknown gunmen</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Okene</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 41</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/41.jpg" alt="Rabiu Usman Kazaure" />
+            </div>
+            <div class="hero-name">Rabiu Usman Kazaure</div>
+            <div class="hero-rank-row">
+              <span>DSN</span>
+              &mdash;
+              <span>2867</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">15th June, 2014</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Mob attack while carrying out official duties</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Ogun State Command</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 42</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/42.jpg" alt="Wassa Maic Awak" />
+            </div>
+            <div class="hero-name">Wassa Maic Awak</div>
+            <div class="hero-rank-row">
+              <span>ASN II</span>
+              &mdash;
+              <span>2438</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">18th January, 2001</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Mob attack during operation</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Calabar Zonal Command</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 43</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/43.jpg" alt="Iliyasu Mohammed" />
+            </div>
+            <div class="hero-name">Iliyasu Mohammed</div>
+            <div class="hero-rank-row">
+              <span>NASS II</span>
+              &mdash;
+              <span>8034</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">17th February, 2019</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Gunshot while performing official duties</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Ondo State Command</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 44</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/placeholder.jpg" alt="Bulus Leo Dam" />
+            </div>
+            <div class="hero-name">Bulus Leo Dam</div>
+            <div class="hero-rank-row">
+              <span>ASN I</span>
+              &mdash;
+              <span>753</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">25th November, 1994</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Motor accident in the course of official assignment</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Ilorin / Warri</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 45</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/45.jpg" alt="Imran Aliyu" />
+            </div>
+            <div class="hero-name">Imran Aliyu</div>
+            <div class="hero-rank-row">
+              <span>ASN I</span>
+              &mdash;
+              <span>0635</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">14th February, 2025</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Mob attack</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Amana Village, along Kaduna-Jos Road</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 46</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/46.jpg" alt="Fynecontry Ihuoma Victory" />
+            </div>
+            <div class="hero-name">Fynecontry Ihuoma Victory</div>
+            <div class="hero-rank-row">
+              <span>CNA</span>
+              &mdash;
+              <span>13237</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">19th January, 2023</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Injuries sustained from road accident while returning from an operation</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Ovia River Bridge, Benin-Lagos Road, Edo State</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 47</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/47.jpg" alt="Owolodun Bolaji" />
+            </div>
+            <div class="hero-name">Owolodun Bolaji</div>
+            <div class="hero-rank-row">
+              <span>SN</span>
+              &mdash;
+              <span>5674</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">15th June, 2016</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Mob attack during operation</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Owode Yewa, Ogun State</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 48</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/48.jpg" alt="Ante Wilson Effiong" />
+            </div>
+            <div class="hero-name">Ante Wilson Effiong</div>
+            <div class="hero-rank-row">
+              <span>NA</span>
+              &mdash;
+              <span>7247</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">11th July, 2016</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Mob attack</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Outskirt of Uyo LGA, Akwa-Ibom State</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 49</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/49.jpg" alt="Ansellem Anayo O." />
+            </div>
+            <div class="hero-name">Ansellem Anayo O.</div>
+            <div class="hero-rank-row">
+              <span>SNA</span>
+              &mdash;
+              <span>6301</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">20th February, 2022</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Killed on official motorized patrol by unknown attackers</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Ebonyi</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 50</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/50.jpg" alt="Mbonu C. Charles" />
+            </div>
+            <div class="hero-name">Mbonu C. Charles</div>
+            <div class="hero-rank-row">
+              <span>ASN II</span>
+              &mdash;
+              <span>4676</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">22nd January, 2014</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Killed during operation</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Edo State Command</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 51</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/placeholder.jpg" alt="Nasiru Ahmed Kotagora" />
+            </div>
+            <div class="hero-name">Nasiru Ahmed Kotagora</div>
+            <div class="hero-rank-row">
+              <span>SN</span>
+              &mdash;
+              <span>3008</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">24th December, 2019</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Knocked and killed during stop and search operations</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Niger State Command</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 52</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/52.jpg" alt="Olatunde Akinwale" />
+            </div>
+            <div class="hero-name">Olatunde Akinwale</div>
+            <div class="hero-rank-row">
+              <span>CSN</span>
+              &mdash;
+              <span>273</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">11th January, 2012</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Killed while preparing to go to work</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Idiroko Special Area Command</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 53</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/53.jpg" alt="Atti Abighe Usman" />
+            </div>
+            <div class="hero-name">Atti Abighe Usman</div>
+            <div class="hero-rank-row">
+              <span>CNA</span>
+              &mdash;
+              <span>3783</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">23rd February, 1997</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Mob attack</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Obosima, Imo State</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 54</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/54.jpg" alt="Magaji Aliyu" />
+            </div>
+            <div class="hero-name">Magaji Aliyu</div>
+            <div class="hero-rank-row">
+              <span>CNA</span>
+              &mdash;
+              <span>6930</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">17th February, 2019</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Killed by unknown gunmen in the course of operation</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Ifon Area Command, Ondo State</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 55</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/placeholder.jpg" alt="Kenneth Love-Day Tarikoro" />
+            </div>
+            <div class="hero-name">Kenneth Love-Day Tarikoro</div>
+            <div class="hero-rank-row">
+              <span>CNA</span>
+              &mdash;
+              <span>3952</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">21st May, 2009</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Gunshot during operation</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Abbi Town, Delta State</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 56</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/56.jpg" alt="Bolaji I. Raufu" />
+            </div>
+            <div class="hero-name">Bolaji I. Raufu</div>
+            <div class="hero-rank-row">
+              <span>NASS II</span>
+              &mdash;
+              <span>3306</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">18th March, 2004</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Gunshot during operation</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Kontagora Area Command, Niger</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 57</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/57.jpg" alt="Uwakwe Celestine Amauche" />
+            </div>
+            <div class="hero-name">Uwakwe Celestine Amauche</div>
+            <div class="hero-rank-row">
+              <span>SNA</span>
+              &mdash;
+              <span>8361</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">5th May, 2020</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Killed by gunmen suspected to be kidnappers in the course of official assignment</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Mbaitoli LGA, Imo State</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 58</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/58.jpg" alt="Abanum Edeli Raymond" />
+            </div>
+            <div class="hero-name">Abanum Edeli Raymond</div>
+            <div class="hero-rank-row">
+              <span>NA</span>
+              &mdash;
+              <span>7391</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">3rd January, 2017</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Killed and hit by a driver in the course of official assignment</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Delta State Command</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 59</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/59.jpg" alt="Wakili D. Kusaki" />
+            </div>
+            <div class="hero-name">Wakili D. Kusaki</div>
+            <div class="hero-rank-row">
+              <span>DSN</span>
+              &mdash;
+              <span>4834</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">14th February, 2015</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Shot by unknown gunmen suspected to be Boko Haram while on duty</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Gombe State Command Headquarters</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 60</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/60.png" alt="Mohammed Umar" />
+            </div>
+            <div class="hero-name">Mohammed Umar</div>
+            <div class="hero-rank-row">
+              <span>CNA</span>
+              &mdash;
+              <span>2722</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">18th February, 2000</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Mob attack during operations</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Garki, Abuja</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 61</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/placeholder.jpg" alt="Lawal Mohammed Ado" />
+            </div>
+            <div class="hero-name">Lawal Mohammed Ado</div>
+            <div class="hero-rank-row">
+              <span>NASS III</span>
+              &mdash;
+              <span>4528</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">21st March, 1998</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Motor accident</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Birnin Gwari Checkpoint, Kaduna</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 62</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/62.jpg" alt="Ogbonnewo Emmanuel O." />
+            </div>
+            <div class="hero-name">Ogbonnewo Emmanuel O.</div>
+            <div class="hero-rank-row">
+              <span>SNA</span>
+              &mdash;
+              <span>8063</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">29th October, 2018</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Killed by a hit and run driver in the course of official duty</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Ringim Road, Jigawa State Command</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 63</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/placeholder.jpg" alt="Abbati Shamsudeen Bello" />
+            </div>
+            <div class="hero-name">Abbati Shamsudeen Bello</div>
+            <div class="hero-rank-row">
+              <span>NA</span>
+              &mdash;
+              <span>6232</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">21st May, 2005</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Gunshot wounds from attack during operation</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Abbi Town, Delta State</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 64</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/64.jpg" alt="Bawa Iyah Danjuma" />
+            </div>
+            <div class="hero-name">Bawa Iyah Danjuma</div>
+            <div class="hero-rank-row">
+              <span>DSN</span>
+              &mdash;
+              <span>3012</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">25th April, 2014</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Attacked during the course of lawful operation</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Uhrongbe Village, Edo State</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 65</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/65.jpg" alt="Chiwatalu Kingsley Ifeanyi" />
+            </div>
+            <div class="hero-name">Chiwatalu Kingsley Ifeanyi</div>
+            <div class="hero-rank-row">
+              <span>SN</span>
+              &mdash;
+              <span>6758</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">9th March, 2024</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Stabbed on his neck by unknown men in military uniform</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Niger State</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 66</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/66.png" alt="Sadiq Bako Mujahid" />
+            </div>
+            <div class="hero-name">Sadiq Bako Mujahid</div>
+            <div class="hero-rank-row">
+              <span>CNA</span>
+              &mdash;
+              <span>23/NA/16378</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">6th February, 2026</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Killed during operation</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Bonny Island, Port Harcourt, Rivers State Command</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 67</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/67.png" alt="Bolarinwa I. Olapoju" />
+            </div>
+            <div class="hero-name">Bolarinwa I. Olapoju</div>
+            <div class="hero-rank-row">
+              <span>NA</span>
+              &mdash;
+              <span>5958</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">3rd May, 2000</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Died as a result of mob attack</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Ejigbo, Osun State</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 68</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/68.png" alt="Kuponu M. Oladeji" />
+            </div>
+            <div class="hero-name">Kuponu M. Oladeji</div>
+            <div class="hero-rank-row">
+              <span>ASN II</span>
+              &mdash;
+              <span>SP/234</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">4th October, 1991</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Died in a fatal accident in the course of an official assignment</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Kano Zone</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 69</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/69.png" alt="Olojo Ajoade" />
+            </div>
+            <div class="hero-name">Olojo Ajoade</div>
+            <div class="hero-rank-row">
+              <span>NA</span>
+              &mdash;
+              <span>2058</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">1st June, 1995</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Mob attack in the course of official assignment</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Kangiwa Village, Kebbi Zone</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 70</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/70.png" alt="Adegbemi Jamiu" />
+            </div>
+            <div class="hero-name">Adegbemi Jamiu</div>
+            <div class="hero-rank-row">
+              <span>NA</span>
+              &mdash;
+              <span>3719</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">6th April, 1999</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Killed in the course of official assignment</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Ope-Iu Village, Ogun State</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 71</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/71.png" alt="Suleiman A. Lawal" />
+            </div>
+            <div class="hero-name">Suleiman A. Lawal</div>
+            <div class="hero-rank-row">
+              <span>NA</span>
+              &mdash;
+              <span>2918</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">12th November, 1996</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Shot while on duty</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Lagos Badagry Expressway Command, Lagos Zone</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 72</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/72.png" alt="Areneth Williams" />
+            </div>
+            <div class="hero-name">Areneth Williams</div>
+            <div class="hero-rank-row">
+              <span>NA</span>
+              &mdash;
+              <span>563</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">27th July, 1998</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Killed by accidental discharge in the course of an operation</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Wukari, Taraba</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 73</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/73.png" alt="Orukotan Joseph" />
+            </div>
+            <div class="hero-name">Orukotan Joseph</div>
+            <div class="hero-rank-row">
+              <span>NA</span>
+              &mdash;
+              <span>2999</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">22nd November, 1998</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Abducted by cannabis farmers during the course of duty; missing since then</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Warri Zone, Delta State</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 74</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/74.png" alt="Kusimo O. Kolawole" />
+            </div>
+            <div class="hero-name">Kusimo O. Kolawole</div>
+            <div class="hero-rank-row">
+              <span>NA</span>
+              &mdash;
+              <span>321</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">20th March, 1999</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Kidnapped in the course of an operation; whereabouts unknown</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Olushi Village, Edo State</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 75</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/75.png" alt="Adogu Solomon" />
+            </div>
+            <div class="hero-name">Adogu Solomon</div>
+            <div class="hero-rank-row">
+              <span>NASS II</span>
+              &mdash;
+              <span>3808</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">22nd November, 1998</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Abducted by cannabis farmers in the course of official assignment; missing since then</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Warri, Warri Zone</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 76</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/76.png" alt="Ariwayo B. Sunday" />
+            </div>
+            <div class="hero-name">Ariwayo B. Sunday</div>
+            <div class="hero-rank-row">
+              <span>NA</span>
+              &mdash;
+              <span>5003</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">23rd March, 1999</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Kidnapped along with two officers in the course of an operation</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Olushi Village, Benin</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 77</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/77.png" alt="Osasogie Omobude" />
+            </div>
+            <div class="hero-name">Osasogie Omobude</div>
+            <div class="hero-rank-row">
+              <span>NA</span>
+              &mdash;
+              <span>827</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">22nd June, 1996</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Stabbed to death on his way to NDLEA Office for night shift duty</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Calabar, Calabar Zone</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 78</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/78.png" alt="Abdu Gudaji" />
+            </div>
+            <div class="hero-name">Abdu Gudaji</div>
+            <div class="hero-rank-row">
+              <span>NA</span>
+              &mdash;
+              <span>2869</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">26th September, 1997</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Killed in the course of official assignment</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Warri, Warri Zone</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 79</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/79.png" alt="Anyanwu G. Echeazu" />
+            </div>
+            <div class="hero-name">Anyanwu G. Echeazu</div>
+            <div class="hero-rank-row">
+              <span>NA</span>
+              &mdash;
+              <span>330</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">20th February, 1997</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Mob attack in the course of a follow-up operation</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Obosima Village, Onitsha Zone</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 80</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/80.png" alt="Soje Y. S." />
+            </div>
+            <div class="hero-name">Soje Y. S.</div>
+            <div class="hero-rank-row">
+              <span>Senior Counselling Officer</span>
+              &mdash;
+              <span>4416</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">27th July, 1998</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Died in a motor accident while returning from Kogi State on official assignment</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Lokoja Road, Makurdi Zone</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 81</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/81.png" alt="Offor Christiana" />
+            </div>
+            <div class="hero-name">Offor Christiana</div>
+            <div class="hero-rank-row">
+              <span>NA</span>
+              &mdash;
+              <span>3216</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">20th March, 1999</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Kidnapped along with two officers in the course of a follow-up operation to arrest a suspect</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Olushi Village, Edo State</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 82</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/placeholder.jpg" alt="Ifejika Samuel" />
+            </div>
+            <div class="hero-name">Ifejika Samuel</div>
+            <div class="hero-rank-row">
+              <span>Senior Narcotic Intelligence Officer</span>
+              &mdash;
+              <span>729</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">25th November, 1994</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Died in a motor accident along with three officers while on assignment</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">N/A</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 83</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/placeholder.jpg" alt="Audu Musa" />
+            </div>
+            <div class="hero-name">Audu Musa</div>
+            <div class="hero-rank-row">
+              <span>NASS II</span>
+              &mdash;
+              <span>1229</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">17th August, 1993</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Attacked and shot by armed robbers while on official duty</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Idiroko Border Post</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 84</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/84.png" alt="Atti A. Usman" />
+            </div>
+            <div class="hero-name">Atti A. Usman</div>
+            <div class="hero-rank-row">
+              <span>CNA</span>
+              &mdash;
+              <span>3783</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">23rd February, 1997</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Mob attack in the course of a follow-up operation to effect an arrest</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Obosima Village, Imo State</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="hero-page">
+            <div class="serial-badge">No. 85</div>
+            <div class="hero-photo-frame">
+              <img src="static/images/heroes/85.jpg" alt="Shehu Aliyu" />
+            </div>
+            <div class="hero-name">Shehu Aliyu</div>
+            <div class="hero-rank-row">
+              <span>NA</span>
+              &mdash;
+              <span>21/NA/13394</span>
+            </div>
+            <hr class="gold-line" />
+            <div class="hero-details">
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">11th January, 2023</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Cause:</span>
+                <span class="detail-value">Killed in a mob attack while on operations to arrest a drug suspect</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Location:</span>
+                <span class="detail-value">Bagarawa Village, Bodinga Area Command, Sokoto State</span>
+              </div>
+            </div>
+            <div class="tribute">
+              <span class="candle-icon">&#x1F56F;</span>
+              Fallen in the Line of Duty
+              <span class="candle-icon">&#x1F56F;</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hard">
+          <div class="back-cover">
+            <img src="static/images/ndlea-logo.png" alt="NDLEA" />
+            <p>
+              We remember your courage.<br>
+              We honour your sacrifice.<br>
+              We pledge to carry forward your legacy.
+            </p>
+            <p style="color:#ff666688; font-size:0.78rem;">
+              National Drug Law Enforcement Agency<br>
+              Republic of Nigeria
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="static/js/turnjs4/extras/jquery.min.1.7.js"></script>
+  <script src="static/js/turnjs4/extras/modernizr.2.5.3.min.js"></script>
+  <script>
+    function recenter() {
+      var page  = $('.flipbook').turn('page');
+      var pages = $('.flipbook').turn('pages');
+      var half  = 1400 / 4;
+      if (page === 1) {
+        $('.flipbook').css('transform', 'translateX(-' + half + 'px)');
+      } else if (page === pages) {
+        $('.flipbook').css('transform', 'translateX(' + half + 'px)');
+      } else {
+        $('.flipbook').css('transform', 'translateX(0)');
+      }
+    }
+
+    function loadApp() {
+      $('.flipbook').turn({
+        width: 1400,
+        height: 960,
+        elevation: 50,
+        gradients: true,
+        autoCenter: false,
+      });
+      recenter();
+      $('.flipbook').bind('turned', function () { recenter(); });
+      $(document).keydown(function (e) {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') $('.flipbook').turn('next');
+        if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   $('.flipbook').turn('previous');
+      });
+    }
+
+    yepnope({
+      test: Modernizr.csstransforms,
+      yep:  ['static/js/turnjs4/lib/turn.js'],
+      nope: ['static/js/turnjs4/lib/turn.html4.min.js'],
+      both: ['static/js/turnjs4/samples/basic/css/basic.css'],
+      complete: loadApp,
+    });
+  </script>
+</body>
+</html>
