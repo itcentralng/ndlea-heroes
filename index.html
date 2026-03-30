@@ -54,7 +54,7 @@
     .flipbook {
       position: relative;
       transition: transform 0.6s ease;
-      box-shadow: 0 0 60px 18px rgba(255,255,255,0.18), 0 0 120px 40px rgba(255,255,255,0.08);
+      background: transparent;
       border-radius: 4px;
     }
 
@@ -68,6 +68,7 @@
       box-sizing: border-box;
       padding: 2rem;
       text-align: center;
+      box-shadow: 0 0 60px 18px rgba(255,255,255,0.18), 0 0 120px 40px rgba(255,255,255,0.08);
     }
     .cover-page img { width: 220px; filter: drop-shadow(0 0 18px #ff444466); }
     .cover-title {
@@ -101,6 +102,7 @@
       box-sizing: border-box;
       text-align: center;
       gap: 1.2rem;
+      box-shadow: 0 0 60px 18px rgba(255,255,255,0.18), 0 0 120px 40px rgba(255,255,255,0.08);
     }
     .intro-page h2 { color: #ff6666; font-size: 1.65rem; margin: 0; }
     .intro-page p { color: #eee; font-size: 1.05rem; line-height: 1.8; margin: 0; }
@@ -197,17 +199,6 @@
       text-align: center;
       text-transform: uppercase;
     }
-    /* Mask to hide empty/peeking side page when book is closed */
-    #cover-mask {
-      position: fixed;
-      top: 0;
-      bottom: 0;
-      background: #1a0000;
-      pointer-events: none;
-      z-index: 20;
-      display: none;
-    }
-
     .back-cover {
       width: 700px; height: 960px;
       background: linear-gradient(160deg, #1a0000 0%, #4a0000 50%, #1a0000 100%);
@@ -217,14 +208,13 @@
       box-sizing: border-box;
       text-align: center;
       border-left: 3px solid #ff444488;
+      box-shadow: 0 0 60px 18px rgba(255,255,255,0.18), 0 0 120px 40px rgba(255,255,255,0.08);
     }
     .back-cover img { width: 80px; opacity: 0.7; }
     .back-cover p { color: #ffbbbb; font-size: 0.85rem; font-style: italic; line-height: 1.7; }
   </style>
 </head>
 <body style="display:flex; flex-direction:column; min-height:100vh;">
-
-  <div id="cover-mask"></div>
 
   <div class="memorial-header">
     <img src="static/images/ndlea-logo.png" alt="NDLEA Logo" />
@@ -3189,27 +3179,16 @@
   <script src="static/js/turnjs4/extras/modernizr.2.5.3.min.js"></script>
   <script src="static/js/turnjs4/lib/turn.js"></script>
   <script>
-    var mask = document.getElementById('cover-mask');
-
     function recenter() {
       var page  = $('.flipbook').turn('page');
       var pages = $('.flipbook').turn('pages');
       var half  = 1400 / 4;
       if (page === 1) {
         $('.flipbook').css('transform', 'translateX(-' + half + 'px)');
-        // Hide the peeking intro page on the left
-        mask.style.display = 'block';
-        mask.style.left  = '0';
-        mask.style.right = 'calc(50% + 350px)';
       } else if (page === pages) {
         $('.flipbook').css('transform', 'translateX(' + half + 'px)');
-        // Hide the peeking hero page on the right
-        mask.style.display = 'block';
-        mask.style.left  = 'calc(50% + 350px)';
-        mask.style.right = '0';
       } else {
         $('.flipbook').css('transform', 'translateX(0)');
-        mask.style.display = 'none';
       }
     }
 
@@ -3228,9 +3207,8 @@
       setTimeout(function () {
         $('.flipbook').css('transition', '');
       }, 50);
-      // Hide mask and reset transform during flip animation
+      // Reset transform during flip animation
       $('.flipbook').bind('turning', function(e, page) {
-        mask.style.display = 'none';
         var pages = $(this).turn('pages');
         if (page !== 1 && page !== pages) {
           $(this).css('transform', 'translateX(0)');
