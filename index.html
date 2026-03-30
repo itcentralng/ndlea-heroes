@@ -3270,8 +3270,8 @@
 
     function scaleBook() {
       var headerH = $('.memorial-header').outerHeight(true) || 110;
-      var availW  = window.innerWidth  * 0.88;
-      var availH  = (window.innerHeight - headerH - 16) * 0.92;
+      var availW  = window.innerWidth  * 0.97;
+      var availH  = (window.innerHeight - headerH - 8) * 0.90;
       var scale   = Math.min(availW / 700, availH / 960);
       scale = Math.max(0.3, Math.min(scale, 1.5));
       _bookScale = scale;
